@@ -1,0 +1,404 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>capybara webkit or selenium or watir to simulate browser behavior - Ruby on Rails Blog</title>
+	<meta name="author" content="Ken Lu, Andrew Sheelan">
+
+	
+	<meta name="description" content="Sometimes we want to simulate browser behavior. The situation can be test or automation script. install capybara-webkit 1
+2
+3
+#capybara-webkit need &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Ruby on Rails Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Ruby on Rails Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:hlee.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:hlee.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Capybara Webkit or Selenium or Watir to Simulate Browser Behavior</h2>
+	<div class="entry-content"><p>Sometimes we want to simulate browser behavior. The situation can be test or automation script.</p>
+
+<h2>install capybara-webkit</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#capybara-webkit need qt</span>
+</span><span class='line'><span class="c1">#ubuntu</span>
+</span><span class='line'><span class="n">sudo</span> <span class="n">aptitude</span> <span class="n">install</span> <span class="n">libqt4</span><span class="o">-</span><span class="n">dev</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>using capybara dsl</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara/dsl&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_driver</span> <span class="o">=</span> <span class="ss">:webkit</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">MyModule</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Capybara</span><span class="o">::</span><span class="no">DSL</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">login!</span>
+</span><span class='line'>    <span class="n">within</span><span class="p">(</span><span class="s2">&quot;//form[@id=&#39;session&#39;]&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">fill_in</span> <span class="s1">&#39;Login&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;user@example.com&#39;</span>
+</span><span class='line'>      <span class="n">fill_in</span> <span class="s1">&#39;Password&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;password&#39;</span>
+</span><span class='line'>      <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;First Name&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;John&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;Password&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;Seekrit&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">fill_in</span><span class="p">(</span><span class="s1">&#39;Description&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;Really Long Text...&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">choose</span><span class="p">(</span><span class="s1">&#39;A Radio Button&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">check</span><span class="p">(</span><span class="s1">&#39;A Checkbox&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">uncheck</span><span class="p">(</span><span class="s1">&#39;A Checkbox&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">attach_file</span><span class="p">(</span><span class="s1">&#39;Image&#39;</span><span class="p">,</span> <span class="s1">&#39;/path/to/image.jpg&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="nb">select</span><span class="p">(</span><span class="s1">&#39;Option&#39;</span><span class="p">,</span> <span class="ss">:from</span> <span class="o">=&gt;</span> <span class="s1">&#39;Select Box&#39;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="n">click_link</span> <span class="s1">&#39;Sign in&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Debugging</h2>
+
+<p>It can be useful to take a snapshot of the page as it currently is and take a
+look at it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">save_and_open_page</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also retrieve the current state of the DOM as a string using
+<tt><a href="http://rubydoc.info/github/jnicklas/capybara/master/Capybara/Session#html-instance_method">page.html</a></tt>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">print</span> <span class="n">page</span><span class="o">.</span><span class="n">html</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is mostly useful for debugging. You should avoid testing against the
+contents of <code>page.html</code> and use the more expressive finder methods instead.</p>
+
+<p>Finally, in drivers that support it, you can save a screenshot:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">page</span><span class="o">.</span><span class="n">save_screenshot</span><span class="p">(</span><span class="s1">&#39;screenshot.png&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Calling remote servers</h2>
+
+<p>Normally Capybara expects to be testing an in-process Rack application, but you
+can also use it to talk to a web server running anywhere on the internets, by
+setting app_host:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">current_driver</span> <span class="o">=</span> <span class="ss">:selenium</span>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">app_host</span> <span class="o">=</span> <span class="s1">&#39;http://www.google.com&#39;</span>
+</span><span class='line'><span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'><span class="n">visit</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Note</strong>: the default driver (<code>:rack_test</code>) does not support running
+against a remote server. With drivers that support it, you can also visit any
+URL directly:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">visit</span><span class="p">(</span><span class="s1">&#39;http://www.google.com&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default Capybara will try to boot a rack application automatically. You
+might want to switch off Capybara&#8217;s rack server if you are running against a
+remote application:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">run_server</span> <span class="o">=</span> <span class="kp">false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Using the sessions manually</h2>
+
+<p>For ultimate control, you can instantiate and use a
+<a href="http://rubydoc.info/github/jnicklas/capybara/master/Capybara/Session">Session</a>
+manually.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;capybara&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">session</span> <span class="o">=</span> <span class="no">Capybara</span><span class="o">::</span><span class="no">Session</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:webkit</span><span class="p">,</span> <span class="n">my_rack_app</span><span class="p">)</span>
+</span><span class='line'><span class="n">session</span><span class="o">.</span><span class="n">within</span><span class="p">(</span><span class="s2">&quot;//form[@id=&#39;session&#39;]&quot;</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">session</span><span class="o">.</span><span class="n">fill_in</span> <span class="s1">&#39;Login&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;user@example.com&#39;</span>
+</span><span class='line'>  <span class="n">session</span><span class="o">.</span><span class="n">fill_in</span> <span class="s1">&#39;Password&#39;</span><span class="p">,</span> <span class="ss">:with</span> <span class="o">=&gt;</span> <span class="s1">&#39;password&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">session</span><span class="o">.</span><span class="n">click_link</span> <span class="s1">&#39;Sign in&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>XPath, CSS and selectors</h2>
+
+<p>Capybara does not try to guess what kind of selector you are going to give it,
+and will always use CSS by default.  If you want to use XPath, you&#8217;ll need to
+do:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">within</span><span class="p">(</span><span class="ss">:xpath</span><span class="p">,</span> <span class="s1">&#39;//ul/li&#39;</span><span class="p">)</span> <span class="p">{</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="p">}</span>
+</span><span class='line'><span class="n">find</span><span class="p">(</span><span class="ss">:xpath</span><span class="p">,</span> <span class="s1">&#39;//ul/li&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+</span><span class='line'><span class="n">find</span><span class="p">(</span><span class="ss">:xpath</span><span class="p">,</span> <span class="s1">&#39;//li[contains(.//a[@href = &quot;#&quot;]/text(), &quot;foo&quot;)]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alternatively you can set the default selector to XPath:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">default_selector</span> <span class="o">=</span> <span class="ss">:xpath</span>
+</span><span class='line'><span class="n">find</span><span class="p">(</span><span class="s1">&#39;//ul/li&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Capybara allows you to add custom selectors, which can be very useful if you
+find yourself using the same kinds of selectors very often:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">add_selector</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">xpath</span> <span class="p">{</span> <span class="o">|</span><span class="nb">id</span><span class="o">|</span> <span class="no">XPath</span><span class="o">.</span><span class="n">descendant</span><span class="o">[</span><span class="no">XPath</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="o">.</span><span class="n">to_s</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">add_selector</span><span class="p">(</span><span class="ss">:row</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">xpath</span> <span class="p">{</span> <span class="o">|</span><span class="n">num</span><span class="o">|</span> <span class="s2">&quot;.//tbody/tr[</span><span class="si">#{</span><span class="n">num</span><span class="si">}</span><span class="s2">]&quot;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">add_selector</span><span class="p">(</span><span class="ss">:flash_type</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">css</span> <span class="p">{</span> <span class="o">|</span><span class="n">type</span><span class="o">|</span> <span class="s2">&quot;#flash.</span><span class="si">#{</span><span class="n">type</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The block given to xpath must always return an XPath expression as a String, or
+an XPath expression generated through the XPath gem. You can now use these
+selectors like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">find</span><span class="p">(</span><span class="ss">:id</span><span class="p">,</span> <span class="s1">&#39;post_123&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">find</span><span class="p">(</span><span class="ss">:row</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</span><span class='line'><span class="n">find</span><span class="p">(</span><span class="ss">:flash_type</span><span class="p">,</span> <span class="ss">:notice</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can specify an optional match option which will automatically use the
+selector if it matches the argument:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Capybara</span><span class="o">.</span><span class="n">add_selector</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">xpath</span> <span class="p">{</span> <span class="o">|</span><span class="nb">id</span><span class="o">|</span> <span class="no">XPath</span><span class="o">.</span><span class="n">descendant</span><span class="o">[</span><span class="no">XPath</span><span class="o">.</span><span class="n">attr</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">id</span><span class="o">.</span><span class="n">to_s</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">match</span> <span class="p">{</span> <span class="o">|</span><span class="n">value</span><span class="o">|</span> <span class="n">value</span><span class="o">.</span><span class="n">is_a?</span><span class="p">(</span><span class="no">Symbol</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now use it like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">find</span><span class="p">(</span><span class="ss">:post_123</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This :id selector is already built into Capybara by default, so you don&#8217;t
+need to add it yourself<a href="https://github.com/jnicklas/capybara">.</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-06T15:29:00-05:00" pubdate data-updated="true">Dec 6<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/capybara/'>capybara</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/selenium/'>selenium</a>, <a class='category' href='/blog/categories/webkit/'>webkit</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/12/06/capybara-webkit-or-selenium-or-watir-to-simulate-browser-behavior/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    Ken Lu, Andrew Sheelan
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'guest';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hlee.github.com/blog/2012/12/06/capybara-webkit-or-selenium-or-watir-to-simulate-browser-behavior/';
+        var disqus_url = 'http://hlee.github.com/blog/2012/12/06/capybara-webkit-or-selenium-or-watir-to-simulate-browser-behavior/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

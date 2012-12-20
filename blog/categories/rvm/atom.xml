@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rvm | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/rvm/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sudo vs RVMSudo]]></title>
+    <link href="http://hlee.github.com/blog/2012/12/02/sudo-vs-rvmsudo/"/>
+    <updated>2012-12-02T08:42:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/12/02/sudo-vs-rvmsudo</id>
+    <content type="html"><![CDATA[<p><a href="https://rvm.io">RVM</a> is a great command-line tool which allows you to easily install, manage, and work with multiple ruby environments from interpreters to sets of gems.
+This is exactly what makes it special, its easy to <a href="https://rvm.io/rvm/install">install RVM</a> with just a few commands..</p>
+
+<p>Installing RVM:</p>
+
+<p><code>sh
+curl -L https://get.rvm.io | bash -s stable
+source ~/.bashrc
+</code></p>
+
+<p>Source is to load bashrc in the same window.
+Now just use</p>
+
+<p><code>sh
+rvm install 1.9.3
+rvm use 1.9.3
+</code></p>
+
+<p>and it now you can start using ruby version 1.9.3 and switch or add more
+versions and install gems in its own version.</p>
+
+<p>In spite of having such features to help the user, everything from there runs only for the logged in user, there may be times where you must run Ruby scripts with RVM as root (or another user) via sudo.</p>
+
+<p>But if you do this after installing rvm:</p>
+
+<p><code>sh
+sudo ruby script.rb
+</code></p>
+
+<p>It would problably not work at all or would be using the system installed
+version of ruby(which might be old). Do not forget to check the version of the ruby when you do a
+sudo, if it runs!</p>
+
+<p><code>sh
+sudo ruby -v
+</code></p>
+
+<p>sudo always starts a new subshell and runs as root from the current user. That new subshell's environment will be completely different, and which means that it does not contain RVM or the other paths.
+There is a workaround, where you can manually add the path by finding them.
+Not a great idea, but works.</p>
+
+<p>RVM has a solution for running sudo with the environments, the 'rvmsudo' command. It will pass on any environment variables that RVM set up to get you to the correct Ruby.
+This includes the following variables</p>
+
+<ul>
+<li>$PATH</li>
+<li>$GEM_HOME</li>
+<li>$GEM_PATH</li>
+<li>$BUNDLE_PATH</li>
+</ul>
+
+
+<p>So to run the same ruby script script.rb, simply use the Ruby you want and run it with rvmsudo.</p>
+
+<p><code>sh
+rvm use 1.9.3
+rvmsudo ruby script.rb
+</code>
+As always, running commands as the root user with elevated privileges, needs to be carefully done since they can alter settings and install unwanted features to all users of the system.
+[Follow our friendly trusted neighborhood spidey.. With Great power comes Great Responsibility]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Installing rvm on a Mac - Issues With gcc]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/install-rvm-at-mac-with-gcc-problem/"/>
+    <updated>2012-11-28T08:45:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/install-rvm-at-mac-with-gcc-problem</id>
+    <content type="html"><![CDATA[<p>While installing RVM on a mac, one of the major problems we face are due to missing Xcode. We usually get the error below:</p>
+
+<p>```sh</p>
+
+<pre><code>rvm install 1.9.3
+Installing Ruby from source to: /Users/jamie/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...
+
+ruby-1.9.3-p0 - #fetching 
+ruby-1.9.3-p0 - #extracted to /Users/jamie/.rvm/src/ruby-1.9.3-p0 (already extracted)
+Fetching yaml-0.1.4.tar.gz to /Users/jamie/.rvm/archives
+Extracting yaml-0.1.4.tar.gz to /Users/jamie/.rvm/src
+Configuring yaml in /Users/jamie/.rvm/src/yaml-0.1.4.
+Compiling yaml in /Users/jamie/.rvm/src/yaml-0.1.4.
+Installing yaml to /Users/jamie/.rvm/usr
+ruby-1.9.3-p0 - #configuring 
+ERROR: Error running ' ./configure --prefix=/Users/jamie/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/jamie/.rvm/usr ', please read /Users/jamie/.rvm/log/ruby-1.9.3-p0/configure.log
+ERROR: There has been an error while running configure. Halting the installation.
+</code></pre>
+
+<p>```</p>
+
+<p>The Error message also looks like this:</p>
+
+<p><code>sh
+rvm install 1.9.3
+ERROR: The autodetected CC(/usr/bin/gcc-4.2) is LLVM based, it is not yet fully supported by ruby and gems, please read `rvm requirements`, and set CC=/path/to/gcc .
+</code></p>
+
+<p>Find the GCC installed in Mac:</p>
+
+<p><code>sh
+gcc -v
+Using built-in specs.
+Target: i686-apple-darwin11
+Configured with: /private/var/tmp/llvmgcc42/llvmgcc42-2336.1~1/src/configure --disable-checking --enable-werror --prefix=/Developer/usr/llvm-gcc-4.2 --mandir=/share/man --enable-languages=c,objc,c++,obj-c++ --program-prefix=llvm- --program-transform-name=/^[cg][^.-]*$/s/$/-4.2/ --with-slibdir=/usr/lib --build=i686-apple-darwin11 --enable-llvm=/private/var/tmp/llvmgcc42/llvmgcc42-2336.1~1/dst-llvmCore/Developer/usr/local --program-prefix=i686-apple-darwin11- --host=x86_64-apple-darwin11 --target=i686-apple-darwin11 --with-gxx-include-dir=/usr/include/c++/4.2.1
+Thread model: posix
+gcc version 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.1.00)
+</code></p>
+
+<p>also look for the files in user/bin</p>
+
+<p><code>sh
+ls /usr/bin | grep gcc
+gcc
+i686-apple-darwin11-llvm-gcc-4.2
+llvm-gcc
+llvm-gcc-4.2
+</code></p>
+
+<p>Here are a few ways to resolve this - read them all to get a better understanding of ways to fix issues like these:</p>
+
+<ul>
+<li>Install with clang</li>
+</ul>
+
+
+<p><code>sh
+rvm install 1.9.3 --with-gcc=clang
+</code></p>
+
+<ul>
+<li>Install a lighter version of gcc osx-gcc</li>
+</ul>
+
+
+<p><a href="https://github.com/kennethreitz/osx-gcc-installer/downloads">LLVM GCC</a></p>
+
+<p>Be carefull about this, sometimes there are conflicts with Brew</p>
+
+<ul>
+<li><p>The best of them all could still be to use the <a href="https://developer.apple.com/downloads/index.action">command line tools for xcode</a></p></li>
+<li><p>If you face issues with readline, its best to pkg install readline</p></li>
+</ul>
+
+
+<p><code>sh
+rvm pkg install readline
+rvm install 1.9.3 --with-gcc=clang --with-readline-dir=$rvm_path/usr
+</code></p>
+
+<ul>
+<li>(xcode 4.5) install RVM on Mac OSX 10.8 (Mountain Lion) with Xcode 4.5 <a href="https://gist.github.com/3789921">without installing Command Line Tools</a></li>
+</ul>
+
+
+<p><a href="http://stackoverflow.com/questions/8032824/cant-install-ruby-under-lion-with-rvm-gcc-issues">.</a></p>
+
+<p>Any questions on this, please feel free to ask. We’re here to help…</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RVM Setup and Environments]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/15/rvm-setup-and-environments/"/>
+    <updated>2012-11-15T09:23:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/15/rvm-setup-and-environments</id>
+    <content type="html"><![CDATA[<p>RVM is the Ruby environment manager. Here are some of the commonly used
+commands.</p>
+
+<p><strong>Installing rvm in unix/mac</strong></p>
+
+<p><code>sh
+curl -L https://get.rvm.io | bash -s stable
+</code></p>
+
+<p><strong>Setting up the bash profile for enabling rvm</strong></p>
+
+<p>File: .bash_profile
+<code>sh
+[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; . "$HOME/.rvm/scripts/rvm"  # This loads RVM
+</code></p>
+
+<p>Dont forget to source it, to load the ~/.bash_profile if you're using the same console
+<code>sh
+source .bash_profile
+</code></p>
+
+<p><strong>Installing new Ruby version</strong>
+<code>sh
+rvm install 1.9.3-p327
+</code></p>
+
+<p><strong>Listing installed ruby versions</strong>
+<code>sh
+rvm list
+</code></p>
+
+<p><strong>Updating rvm version from head</strong>
+<code>sh
+rvm get head
+</code></p>
+
+<p><strong>Setting the default ruby version</strong>
+<code>sh
+rvm alias create default 1.9.3
+rvm use 1.8.7-p302 --default
+</code></p>
+
+<p><strong>For more help use:</strong></p>
+
+<p><code>sh
+rvm --help
+</code></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

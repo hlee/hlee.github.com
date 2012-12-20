@@ -1,0 +1,1225 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Ruby on Rails Blog</title>
+	<meta name="author" content="Ken Lu, Andrew Sheelan">
+
+	
+	<meta name="description" content="strftime Formats date according to the directives in the given format string. The directives begins with a percent (%) character. Any text not &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Ruby on Rails Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Ruby on Rails Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:hlee.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:hlee.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/28/timestamps-strftime-vs-strptime/">
+		
+			Timestamps Strftime vs Strptime</a>
+	</h2>
+	<div class="entry-content">
+		<h3>strftime</h3>
+
+<p>Formats date according to the directives in the given format string. The directives begins with a percent (%) character. Any text not listed as a directive will be passed through to the output string.</p>
+
+<p><a href="http://apidock.com/ruby/DateTime/strftime">source link</a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">puts</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%FT%T%:z&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#  %F - The ISO 8601 date format (%Y-%m-%d)</span>
+</span><span class='line'><span class="c1">#  %T - 24-hour time (%H:%M:%S)</span>
+</span><span class='line'><span class="c1">#  %:z - hour and minute offset from UTC with a colon (e.g. +09:00)</span>
+</span><span class='line'><span class="c1">#  output: 2012-11-28T06:29:36-05:00</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>strptime</h3>
+
+<p>Parses the given representation of date and time with the given template, and creates a date object.</p>
+
+<p><a href="http://apidock.com/ruby/DateTime/strptime/class">source link</a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;%m/%d/%Y %H:%M:%S&quot;</span>
+</span><span class='line'><span class="n">date_time</span> <span class="o">=</span> <span class="s2">&quot;11/28/2012 16:39:11.642&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">date_obj</span> <span class="o">=</span> <span class="no">DateTime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_time</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-28T06:20:00-05:00" pubdate data-updated="true">Nov 28<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/strftime/'>strftime</a>, <a class='category' href='/blog/categories/strptime/'>strptime</a>, <a class='category' href='/blog/categories/timestamp/'>timestamp</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/28/timestamps-strftime-vs-strptime//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/28/working-on-digests-and-signatures/">
+		
+			Working With Digests and Signatures</a>
+	</h2>
+	<div class="entry-content">
+		<h3>MD5 digests</h3>
+
+<p>MD5 is a one-way hashing algorithm for creating digest &#8220;signatures&#8221; or checksums of strings. MD5 digests are 128 bit (16 byte) signatures. MD5 is the most common method of providing checksums for files downloaded over the internet.
+To create a checksum of an entire file or text convert the whole string.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">digest</span> <span class="o">=</span> <span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="n">string_to_digest</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://www.siaris.net/index.cgi/Programming/LanguageBits/Ruby/MD5.rdoc">source link</a></p>
+
+<h3>hmac-sha1</h3>
+
+<p>In cryptography, a hash-based message authentication code (HMAC) is a specific construction for calculating a message authentication code (MAC) involving a cryptographic hash function in combination with a secret cryptographic key. As with any MAC, it may be used to simultaneously verify both the data integrity and the authenticity of a message.</p>
+
+<p><a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">source link</a></p>
+
+<p>In ruby its simple to generate one:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="n">install</span> <span class="n">ruby</span><span class="o">-</span><span class="n">hmac</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">hmac_sha1</span> <span class="n">params</span><span class="o">=</span><span class="p">{}</span>
+</span><span class='line'>  <span class="nb">require</span> <span class="s1">&#39;openssl&#39;</span>
+</span><span class='line'>  <span class="n">secret_key</span> <span class="o">=</span> <span class="s1">&#39;No telling a secret&#39;</span>
+</span><span class='line'>  <span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="s1">&#39;sha1&#39;</span><span class="p">,</span> <span class="n">secret_key</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-28T05:53:00-05:00" pubdate data-updated="true">Nov 28<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/hmac-sha1/'>hmac sha1</a>, <a class='category' href='/blog/categories/md5/'>md5</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/28/working-on-digests-and-signatures//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/26/applying-common-filtering-for-rails-api-based-applications/">
+		
+			Applying Common Filtering for Rails Api Based Applications</a>
+	</h2>
+	<div class="entry-content">
+		<p>Sometimes there are common sets of fields and id&#8217;s that we would like the api
+to filter before sending the details to the client. It would be great if we can
+place them in a common place so that they can be changed anytime.</p>
+
+<p>File: lib/api_config.rb</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Filters out the specified list of fields from the API calls</span>
+</span><span class='line'><span class="no">APIFILTERS</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="s1">&#39;password&#39;</span><span class="p">,</span><span class="s1">&#39;secret__internal_id&#39;</span><span class="p">,</span><span class="s1">&#39;updated_at&#39;</span><span class="p">,</span><span class="s1">&#39;created_at&#39;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>File: config/initializers/json_config.rb</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Requiring the api configuration file</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;api_config&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">as_json_with_filter</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="no">Hash</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">options</span><span class="o">[</span><span class="ss">:except</span><span class="o">]</span> <span class="o">=</span> <span class="no">APIFILTERS</span>
+</span><span class='line'>    <span class="n">as_json_without_filter</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="n">alias_method_chain</span> <span class="ss">:as_json</span><span class="p">,</span> <span class="ss">:filter</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>the alias_method_chain does two things here:</p>
+
+<ul>
+<li><p>firstly it creates an alias method called as_json_without_filter to as_json</p></li>
+<li><p>secondly it looks for as_json_with_filter and makes that as the new as_json
+method</p></li>
+</ul>
+
+
+<p>The as_json method is one that gets called when the to_json method is called on a
+model object or a collection of model objects in rails</p>
+
+<p>example: users controller file</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">UsersController</span> <span class="o">&lt;</span> <span class="no">ApplicationController</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">respond_to</span> <span class="ss">:json</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">show</span>
+</span><span class='line'>    <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">respond_with</span> <span class="vi">@user</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>the above would call the as_json method of the user model, we have just
+overridden the super class to filter out a few fields</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">User</span> <span class="o">&lt;</span> <span class="no">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">as_json</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="p">{})</span>
+</span><span class='line'>  <span class="k">super</span><span class="p">(</span><span class="ss">:include</span> <span class="o">=&gt;</span> <span class="ss">:parents</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>for xml, this is slightly Different</p>
+
+<p>File: config/initializers/xml_config.rb</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Requiring the api configuration file</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;api_config&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ActiveRecord</span><span class="o">::</span><span class="no">Base</span>
+</span><span class='line'>  <span class="n">alias_method</span> <span class="ss">:to_xml</span><span class="p">,</span> <span class="ss">:old_to_xml</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="no">Hash</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">options</span><span class="o">[</span><span class="ss">:except</span><span class="o">]</span> <span class="o">=</span> <span class="no">APIFILTERS</span>
+</span><span class='line'>    <span class="n">old_to_xml</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Any questions, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-26T22:50:00-05:00" pubdate data-updated="true">Nov 26<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/api/'>api</a>, <a class='category' href='/blog/categories/configuration/'>configuration</a>, <a class='category' href='/blog/categories/rails/'>rails</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/26/applying-common-filtering-for-rails-api-based-applications//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/26/initializing-custom-yml-configuration-variables-for-environments-in-rails/">
+		
+			Initializing Custom YML Configuration Variables for Different Environments in Rails</a>
+	</h2>
+	<div class="entry-content">
+		<p>Another common problem that rails developers face while developing web
+applications that connect to multiple external systems and api&#8217;s is configuring
+the the same parameters for different environments.</p>
+
+<p>The simplest way -</p>
+
+<ul>
+<li><p>Add a folder to the config folder of your application</p></li>
+<li><p>Add all the configuration in as a yml file, like how we use the database.yml
+ with all the environments in it</p></li>
+</ul>
+
+
+<p>sample file: config/google_api.yml</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">development</span><span class="p-Indicator">:</span> <span class="nl">&amp;default_settings</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">google_analytics_id</span><span class="p-Indicator">:</span> <span class="s">&#39;UA-xxxxxxxx-1&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">test</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">&lt;&lt;</span><span class="p-Indicator">:</span> <span class="nv">*default_settings</span>
+</span><span class='line'><span class="l-Scalar-Plain">sandbox</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">google_analytics_id</span><span class="p-Indicator">:</span> <span class="s">&#39;UA-xxxxxxxx-2&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">staging</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">google_analytics_id</span><span class="p-Indicator">:</span> <span class="s">&#39;UA-xxxxxxxx-3&#39;</span>
+</span><span class='line'><span class="l-Scalar-Plain">production</span><span class="p-Indicator">:</span>
+</span><span class='line'>  <span class="l-Scalar-Plain">google_analytics_id</span><span class="p-Indicator">:</span> <span class="s">&#39;UA-xxxxxxxx-4&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  the &amp;default_settings and *default_settings can be used to pass the same
+  values into another yml</p>
+
+<ul>
+<li><p>add the following to your rb file:</p>
+
+<p>File: config/environment.rb</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Load the rails application</span>
+</span><span class='line'><span class="nb">require</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="s1">&#39;../application&#39;</span><span class="p">,</span> <span class="bp">__FILE__</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Auto Load APP_CONFIG for the corresponding environment configuration</span>
+</span><span class='line'><span class="no">APP_CONFIG</span> <span class="o">=</span> <span class="no">HashWithIndifferentAccess</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">load_files</span> <span class="o">=</span> <span class="no">Dir</span><span class="o">[</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">Rails</span><span class="o">.</span><span class="n">root</span><span class="si">}</span><span class="s2">/config/app_config/*.yml&quot;</span><span class="o">].</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">file</span><span class="o">|</span>
+</span><span class='line'>  <span class="no">APP_CONFIG</span><span class="o">.</span><span class="n">merge!</span><span class="p">(</span><span class="no">YAML</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">[</span><span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Initialize the rails application</span>
+</span><span class='line'><span class="no">Livegamer</span><span class="o">::</span><span class="no">Application</span><span class="o">.</span><span class="n">initialize!</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  The above code adds all the yml files inside the folder we created(app_config) under the config folder to a
+  hash(APP_CONFIG).</p>
+
+<ul>
+<li>Now we can use get the google analytics id with the following</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">google_id</span> <span class="o">=</span> <span class="no">APP_CONFIG</span><span class="o">[</span><span class="s1">&#39;google_analytics_id&#39;</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  This would return the corresponding configuration variable depending upon the
+  environment.</p>
+
+<p>  Simple.. :)</p>
+
+<p>  Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-26T22:22:00-05:00" pubdate data-updated="true">Nov 26<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/configuration/'>configuration</a>, <a class='category' href='/blog/categories/environments/'>environments</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/yml/'>yml</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/26/initializing-custom-yml-configuration-variables-for-environments-in-rails//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/24/extend-vs-include-in-ruby-module/">
+		
+			Extend vs Include in Ruby Module</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>Extend vs. Include</strong>
+Modules are used for mixins, ruby&#8217;s way of handling muliple inheritance without the complications.
+There are two ways to mixin, either include or extend to mix in a module’s functionality into a class.</p>
+
+<p><strong>Difference:</strong></p>
+
+<p>include makes the module’s methods available to the instance of a class,
+attached to the instances of the class alone.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="s1">&#39;heyyyyoooo!&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Foo</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Bar</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">foo</span> <span class="c1"># heyyyyoooo!</span>
+</span><span class='line'><span class="no">Bar</span><span class="o">.</span><span class="n">foo</span> <span class="c1"># NoMethodError: undefined method ‘foo’ for Bar:Class</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>extend makes these methods available to the class as class methods, implemented
+with a self &lt;&lt; class*</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Baz</span>
+</span><span class='line'>  <span class="kp">extend</span> <span class="no">Foo</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Baz</span><span class="o">.</span><span class="n">foo</span> <span class="c1"># heyyyyoooo!</span>
+</span><span class='line'><span class="no">Baz</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">foo</span> <span class="c1"># NoMethodError: undefined method ‘foo’ for #\&lt;Baz:0x1e708&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>More information here at the <a href="http://railstips.org/blog/archives/2009/05/15/include-vs-extend-in-ruby/">source link</a>.</p>
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-24T08:04:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/extend/'>extend</a>, <a class='category' href='/blog/categories/include/'>include</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/24/extend-vs-include-in-ruby-module//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/24/ruby-comparison-operators/">
+		
+			Ruby Comparison Operators</a>
+	</h2>
+	<div class="entry-content">
+		<p>There has been lots of questions on the comparison operators. So we yanked it for you..</p>
+
+<table class="src" border="1" cellpadding="5" cellspacing="0" width="100%">
+<tbody><tr>
+<th width="10%">Operator</th><th width="45%">Description</th><th>Example</th>
+</tr>
+<tr>
+<td>==</td><td> Checks if the value of two operands are equal or not, if yes then condition becomes true.</td><td> (a == b) is not true. </td>
+</tr>
+<tr>
+<td>!=</td><td> Checks if the value of two operands are equal or not, if values are not equal then condition becomes true.</td><td> (a != b) is true. </td>
+</tr>
+<tr>
+<td>&gt;</td><td> Checks if the value of left  operand is greater than the value of right operand, if yes then condition becomes true.</td><td> (a &gt; b) is not true. </td>
+</tr>
+<tr>
+<td>&lt;</td><td> Checks if the value of left  operand is less than the value of right operand, if yes then condition becomes true.</td><td> (a &lt; b) is true. </td>
+</tr>
+<tr>
+<td>&gt;=</td><td> Checks if the value of left  operand is greater than or equal to the value of right operand, if yes then condition becomes true.</td><td> (a &gt;= b) is not true. </td>
+</tr>
+<tr>
+<td>&lt;=</td><td> Checks if the value of left  operand is less than or equal to the value of right operand, if yes then condition becomes true.</td><td> (a &lt;= b) is true. </td>
+</tr>
+<tr>
+<td>&lt;=&gt;</td><td> Combined comparison operator. Returns 0 if first operand equals second, 1 if first operand is greater than the second and -1 if first operand is less than the second.</td><td> (a &lt;=&gt; b)  returns -1. </td>
+</tr>
+<tr>
+<td>===</td><td> Used to test equality within a when clause of a <i>case</i> statement.</td><td> (1&#8230;10) === 5 returns true. </td>
+</tr>
+<tr>
+<td><b>.eql?</b></td><td>True if the receiver and argument have both the same type and equal values.</td><td> 1
+== 1.0 returns true, but 1<b>.eql?</b>(1.0) is false.</td>
+</tr>
+<tr>
+<td><b>equal?</b></td><td>True if the receiver and argument have the same object id.</td><td> 1
+== 1.0 returns true, but 1<b>.eql?</b>(1.0) is false.</td>
+</tr>
+</tbody></table>
+
+
+<p>There&#8217;s more here at the <a href="http://www.tutorialspoint.com/ruby/ruby_operators.htm">Source Link</a></p>
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-24T07:59:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/double-equal/'>double equal</a>, <a class='category' href='/blog/categories/operators/'>operators</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/triple-equal/'>triple equal</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/24/ruby-comparison-operators//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/24/working-with-processes-in-unix/">
+		
+			Working With Processes in Unix</a>
+	</h2>
+	<div class="entry-content">
+		<p>There are two commands heavily used by developers for checking their pocesses
+in unix.</p>
+
+<ol>
+<li>Firstly it is the search for processes</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>ps -ef | grep search_process
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>ps aux | grep search_process
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>what&#8217;s the difference, well both do the same task</p>
+
+<p><a href="http://askubuntu.com/questions/129962/ps-ef-vs-ps-aux">link</a></p>
+
+<p>Both list all processes of all users. In that aspect -e and ax are completely equivalent.
+Where they differ is output format specifier, -f is &#8220;full&#8221;, while u is &#8220;user-oriented&#8221;. The displayed columns are different:
+columns for ps -f
+UID PID PPID C STIME TTY TIME CMD</p>
+
+<p>columns for ps u
+USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</p>
+
+<p>The difference between ps -ef and ps aux is due to historical divergences between POSIX and BSD systems.
+At the beginning, POSIX accepted the -ef while the BSD accepted only the aux form.</p>
+
+<ol>
+<li>Secondly to kill the process that we just found</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">kill</span> -9 pid
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">kill</span> -SIGKILL PID
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or if we know the process name and if the unix system supports</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>killall nginx
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Tip: What if we need to kill all the processes that starts with &#8216;schedule&#8217;.
+Here it is..</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>ps aux | grep schedule | grep -v grep | awk <span class="s1">&#39;{print $2}&#39;</span> | xargs <span class="nb">kill</span> -9
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A quick description of the steps:</p>
+
+<ol>
+<li>&#8220;ps aux | grep schedule&#8221; searches for the processes by the name schedule and
+returns the rows</li>
+<li>&#8220;grep -v grep&#8221; excludes grep from the searched process list (rows)</li>
+<li>&#8220;awk &#8216;{print $2}&#8217;&#8221; prints the second column of all the values returned.
+Which is mostly the process Id, if not choose the corresponding column by
+its number of appearance in the rows returned</li>
+<li>&#8220;xargs kill -9&#8221; sends the kill signal to all the selected process Ids</li>
+</ol>
+
+
+<p>Please make sure that you are searching for the right processes before killing them.</p>
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-24T07:08:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/aux/'>aux</a>, <a class='category' href='/blog/categories/ps/'>ps</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/24/working-with-processes-in-unix//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/24/setting-up-a-development-mailer-for-rails-with-a-gmail-account/">
+		
+			Setting Up a Development Mailer for Rails With a Gmail Account</a>
+	</h2>
+	<div class="entry-content">
+		<p>Setting up the rails mailer for development purposes is much easier. using the
+action mailer to configure the gmail services, is just a few commands and
+configurations away&#8230;</p>
+
+<p>Make sure that these settings are not used in production.</p>
+
+<ol>
+<li>Firstly <a href="https://accounts.google.com/SignUp">Sign Up</a> for a dummy gmail account.</li>
+<li>Next add the following configuration in development.rb</li>
+</ol>
+
+
+<p>File: config/environments/development.rb</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>config.action_mailer.raise_delivery_errors <span class="o">=</span> <span class="nb">true</span>
+</span><span class='line'>config.action_mailer.delivery_method <span class="o">=</span> :smtp
+</span><span class='line'>config.action_mailer.smtp_settings <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>  :address              <span class="o">=</span>&gt; <span class="s2">&quot;smtp.gmail.com&quot;</span>,
+</span><span class='line'>  :port                 <span class="o">=</span>&gt; 587,
+</span><span class='line'>  :domain               <span class="o">=</span>&gt; <span class="s1">&#39;&lt;your_domain&gt;&#39;</span>,
+</span><span class='line'>  :user_name            <span class="o">=</span>&gt; <span class="s1">&#39;&lt;user_name&gt;&#39;</span>,
+</span><span class='line'>  :password             <span class="o">=</span>&gt; <span class="s1">&#39;&lt;password&gt;&#39;</span>,
+</span><span class='line'>  :authentication       <span class="o">=</span>&gt; <span class="s1">&#39;plain&#39;</span>,
+</span><span class='line'>  :enable_starttls_auto <span class="o">=</span>&gt; <span class="nb">true</span>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Login to the gmail account and check the sent mails, to preview the sent mail.</p>
+
+<p>There&#8217;s a lot more that can be done with this, check the <a href="http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration-for-gmail">Rails Guids</a> for more information.</p>
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-24T06:42:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/actionmailer/'>actionmailer</a>, <a class='category' href='/blog/categories/gmail/'>gmail</a>, <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/sendmail/'>sendmail</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/24/setting-up-a-development-mailer-for-rails-with-a-gmail-account//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/24/using-screen-to-keep-unix-sessions-active/">
+		
+			Using Screen to Keep Unix Sessions Active</a>
+	</h2>
+	<div class="entry-content">
+		<p>In Unix, what is screen, and how do I use it?</p>
+
+<p>The screen program allows you to use multiple windows (virtual VT100 terminals) in Unix.</p>
+
+<p>Note: UITS does not support screen.</p>
+
+<h3>Features</h3>
+
+<ol>
+<li>If your local computer crashes, or you are connected via a modem and lose the connection, the processes or login sessions you establish through screen don&#8217;t go away. You can resume your screen sessions with the following command:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  screen -r
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In some cases you may have to manually &#8220;detach&#8221; your screen session before resuming it. For more information, see the Knowledge Base document Using screen, why can&#8217;t I re-attach to my session after a lost connection?</p>
+
+<ol>
+<li><p>The screen program creates multiple processes instead of multiple Unix login sessions, which means that it is resource-efficient.</p></li>
+<li><p>You can cut and paste between different screens without using a mouse. Thus, you don&#8217;t need to be on a computer with a windowing environment such as Mac OS, Mac OS X, Windows, or the X Window System.</p></li>
+<li><p>It has a block copy feature which is similar to the kill rectangle feature of Emacs.</p></li>
+<li><p>You can copy and paste more than one page at a time, which you cannot do with some clients. You can scroll up more than one page, depending on how many scrolling lines you have set with the  -h  option.</p></li>
+<li><p>Using the detach feature, you can save screen processes when logging out and resume where you left off, saving the trouble of restarting them.</p></li>
+</ol>
+
+
+<h3>Starting screen</h3>
+
+<p>To start screen, enter the following command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  screen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>General commands</h3>
+
+<p>Note: Every screen command begins with Ctrl-a .</p>
+
+<table cellpadding="10">
+  <tr align="left" valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;c</code> </td>
+    <td align="left">Create new window (shell) </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;k</code> 
+     </td>
+    <td align="left">Kill the current window
+  </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;w</code>
+    </td>
+    <td align="left">List all windows (the current window is marked with &#8220;*&#8221;)</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;0-9</code>
+    </td>
+    <td align="left">Go to a window numbered 0-9</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;n</code>
+    </td>
+    <td align="left">Go to the next window </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a</code>&nbsp;<code>Ctrl-a </code>
+    </td>
+    <td align="left">Toggle between the current and previous window
+    </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;[</code> </td>
+  <td align="left">Start copy mode
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;]</code> </td>
+  <td align="left">Paste copied text
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;?</code> </td>
+  <td align="left">Help (display a list of commands)
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a</code>&nbsp;<code>Ctrl-\</code> </td>
+  <td align="left">Quit <code>screen</code>
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;D</code> (Shift-d) </td>
+  <td align="left">Power detach and logout
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;d</code> </td>
+  <td align="left">Detach but keep shell window open</td>
+  </tr>
+</table>
+
+
+<p>Press the Spacebar or Enter to end a command.</p>
+
+<p><strong>To copy a block</strong></p>
+
+<p>To get into copy mode, press Ctrl-a [  .</p>
+
+<p>To move the cursor, press the  h ,  j ,  k , and  l  (the letter l) keys. The  0  (the number 0) or  ^  (the caret) moves to the start of the line and  $  (the dollar sign) moves to the end of the line. Ctrl-b scrolls the cursor back one page and Ctrl-f scrolls forward one page. To set the left and right margins of copy, press  c  and  C  (Shift-c). The Spacebar starts selecting the text and ends selecting the text. To abort copy mode, press Ctrl-g .</p>
+
+<p><strong>To paste a block</strong></p>
+
+<p>To paste the copied text to the current window (as many times as you want), press Ctrl-a ] .</p>
+
+<p><strong>Other commands</strong></p>
+
+<p>To run a program or execute any Unix command in a new window, at the Unix prompt, enter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  screen unixcommand
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Above, replace unixcommand with the appropriate command name.</p>
+
+<p>To automatically start several windows when you run screen, create a .screenrc file in your home directory and put screen commands in it.</p>
+
+<p>To quit screen (kill all windows in the current session), press Ctrl-a Ctrl-\ .</p>
+
+<p>The man pages for screen are quite readable and make a good tutorial. At the Unix prompt, enter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  man screen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>[Source Link][http://kb.iu.edu/data/acuy.html]</h3>
+
+<h3>If your unix server does not support <a href="/blog/2012/11/24/using-screen-to-keep-unix-sessions-active">screen</a>. It is always a better to run some commands with <a href="/blog/2012/11/24/using-nohup-to-prevent-processes-stopping-on-disconnect">nohup</a>.</h3>
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-24T05:54:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/nohup/'>nohup</a>, <a class='category' href='/blog/categories/screen/'>screen</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/24/using-screen-to-keep-unix-sessions-active//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/11/24/using-nohup-to-prevent-processes-stopping-on-disconnect/">
+		
+			Using Nohup to Prevent Processes Stopping on Disconnect</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>nohup</strong> is an unix command which prevents &#8220;hangups on logout&#8221; which also means that if you decide you need to logoff the from the session with the server, the  command will continue to run as the user.</p>
+
+<p>Syntax:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>nohup run_command &amp;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>run_command in the above Syntax is the name of the command you want to run.</p>
+
+<p>And the &amp; at the end of the line makes the process run in the background. Once the command starts you can then continue to issue other commands or logout if you choose so. After executing the above command you&#8217;ll see this displayed on the command line, and you may need to press the <enter> key before being able to enter other commands.</p>
+
+<p>This means that all the output from the command will go into a file called &#8220;nohup.out&#8221; in the current working directory. You can tail the same to check the logs.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>tail -f nohup.out
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also we can alternatively output the text from the command to a different file using redirection.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>nohup run_command &gt; run_command.log &amp;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>If your unix server supports <a href="/blog/2012/11/24/using-screen-to-keep-unix-sessions-active">screen</a>. It is always a better option with more features.</h3>
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-24T05:32:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/nohup/'>nohup</a>, <a class='category' href='/blog/categories/screen/'>screen</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/24/using-nohup-to-prevent-processes-stopping-on-disconnect//blog/page/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/" class="prev">Prev</a>
+    
+    
+        <a href="/blog/page/3/" class="next">Next</a>
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    Ken Lu, Andrew Sheelan
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'guest';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

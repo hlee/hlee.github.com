@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: actionmailer | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/actionmailer/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up a development mailer for Rails with a gmail account]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/24/setting-up-a-development-mailer-for-rails-with-a-gmail-account/"/>
+    <updated>2012-11-24T06:42:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/24/setting-up-a-development-mailer-for-rails-with-a-gmail-account</id>
+    <content type="html"><![CDATA[<p>Setting up the rails mailer for development purposes is much easier. using the
+action mailer to configure the gmail services, is just a few commands and
+configurations away...</p>
+
+<p>Make sure that these settings are not used in production.</p>
+
+<ol>
+<li>Firstly <a href="https://accounts.google.com/SignUp">Sign Up</a> for a dummy gmail account.</li>
+<li>Next add the following configuration in development.rb</li>
+</ol>
+
+
+<p>File: config/environments/development.rb</p>
+
+<p><code>sh
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  :address              =&gt; "smtp.gmail.com",
+  :port                 =&gt; 587,
+  :domain               =&gt; '&lt;your_domain&gt;',
+  :user_name            =&gt; '&lt;user_name&gt;',
+  :password             =&gt; '&lt;password&gt;',
+  :authentication       =&gt; 'plain',
+  :enable_starttls_auto =&gt; true  }
+</code></p>
+
+<p>Login to the gmail account and check the sent mails, to preview the sent mail.</p>
+
+<p>There's a lot more that can be done with this, check the <a href="http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration-for-gmail">Rails Guids</a> for more information.</p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

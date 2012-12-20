@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: metaprogramming | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/metaprogramming/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding Ruby Object Model]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/20/understand-ruby-object-model/"/>
+    <updated>2012-11-20T22:28:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/20/understand-ruby-object-model</id>
+    <content type="html"><![CDATA[<ol>
+<li><p>classes store methods</p></li>
+<li><p>objects store instance variables</p></li>
+</ol>
+
+
+<p><img src="http://phrogz.net/RubyLibs/RubyMethodLookupFlow.png" alt="ruby method lookup flow" /></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[create ruby dynamic class]]></title>
+    <link href="http://hlee.github.com/blog/2011/02/02/create-ruby-dynamic-class/"/>
+    <updated>2011-02-02T18:24:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2011/02/02/create-ruby-dynamic-class</id>
+    <content type="html"><![CDATA[<p>```ruby
+dynamic_name = "TestEval2"</p>
+
+<p>Object.const_set(dynamic_name, Class.new)
+dummy2 = eval("#{dynamic_name}")
+puts "dummy2: #{dummy2}"
+```</p>
+
+<p><code>ruby
+dynamic_name = "ClassName"
+Object.const_set(dynamic_name, Class.new { def method1() 42 end })
+ClassName.new.method1 #=&gt; 42
+</code></p>
+
+<p>```ruby
+class_name = 'foo'.capitalize
+klass = Object.const_set(class_name,Class.new)</p>
+
+<p>names = ['instance1', 'instance2'] # Array of instance vars</p>
+
+<p>klass.class_eval do
+  attr_accessor *names</p>
+
+<p>  define_method(:initialize) do |*values|</p>
+
+<pre><code>names.each_with_index do |name,i|
+  instance_variable_set("@"+name, values[i])
+end
+</code></pre>
+
+<p>  end
+  # more...
+end
+```</p>
+
+<p>class_eval and const_set are used.</p>
+
+<p>```ruby
+a_new_class = Class.new(Object) do
+  attr_accessor :x</p>
+
+<p>  def initialize(x)</p>
+
+<pre><code>print #{self.class} initialized with #{x}"
+@x = x
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>SomeModule.const_set("ClassName", a_new_class)</p>
+
+<p>c = ClassName.new(10)
+```</p>
+
+<p>without class_eval and const_set
+You don't really need to use const_set. The return value of Class.new can be assigned to a constant and the block of Class.new is class_eval.
+```ruby
+ass Ancestor; end
+SomeClass = Class.new(Ancestor) do
+  def initialize(var)</p>
+
+<pre><code> print "#{self.class} initialized with #{var}"
+</code></pre>
+
+<p>  end
+end
+=> SomeClass
+SomeClass.new("foo")</p>
+
+<h1>SomeClass initialized with foo=> #&lt;SomeClass:0x668b68></h1>
+
+<p>```</p>
+
+<p>The following code uses a class factory to create a new class along with getter and setters for the fields passed into it:
+```ruby
+class ClassFactory
+  def self.create_class(new_class, *fields)</p>
+
+<pre><code>c = Class.new do
+  fields.each do |field|
+    define_method field.intern do
+      instance_variable_get("@#{field}")
+    end
+    define_method "#{field}=".intern do |arg|
+      instance_variable_set("@#{field}", arg)
+    end
+  end
+end
+
+Kernel.const_set new_class, c
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>ClassFactory.create_class "Car", "make", "model", "year"</p>
+
+<p>new_class = Car.new
+new_class.make = "Nissan"
+puts new_class.make # => "Nissan"
+new_class.model = "Maxima"
+puts new_class.model # => "Maxima"
+new_class.year = "2001"
+puts new_class.year # => "2001"
+```
+In Ruby, classes are simply objects like any other, which are then assigned to a constant.  Hence, to create a new class dynamically we instantiate the class Class with Class.new, and then assign it to a constant via const_set (we invoke it on Kernel so that it is a top-level constant like any other class).  We then add the code that makes up the class in a do-end block.</p>
+
+<p>In that do-end block, for each field we invoke define_method twice, first for the getter method and then the setter method with get_instance_variable and set_instance_variable, respectively.  For each field, we create the instance variables (e.g., for make, we use @make).  Note how we make use of passing the argument in for the setter.</p>
+
+<p>Additionally, if I wanted to make the class a sub-class, I could have used Class.new(parent_class)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[basic metaprogramming ruby class_eval and instance_eval]]></title>
+    <link href="http://hlee.github.com/blog/2010/07/20/basic-metaprogramming-ruby-class-eval-and-instance-eval/"/>
+    <updated>2010-07-20T19:21:00-04:00</updated>
+    <id>http://hlee.github.com/blog/2010/07/20/basic-metaprogramming-ruby-class-eval-and-instance-eval</id>
+    <content type="html"><![CDATA[<p>```ruby
+class A</p>
+
+<p>  def create_method(name)</p>
+
+<pre><code>self.class.instance_eval do
+  define_method(name) { puts "Nice!  I'm #{name}" }
+  def human?
+    true
+  end
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  def create_class_method(name)</p>
+
+<pre><code>self.class.instance_eval do
+  self.class.send( :define_method, name) { puts "Nice!  I'm #{name}" }
+end
+</code></pre>
+
+<p>  end</p>
+
+<p>  def create_instance_method(name)</p>
+
+<pre><code>(class &lt;&lt; self; self; end).class_eval do
+  #self.class.send( :define_method, name) { puts "Nice!  I'm #{name}" }
+  define_method(name) { puts "Nice!  I'm #{name}" }
+end
+</code></pre>
+
+<p>  end
+```</p>
+
+<p>Sometimes when the book explains a concept or Ruby feature, it sheds light on things I've seen in other people's code – things I've always wondered about. One such example is class_eval and instance_eval. These methods allow you to evaluate arbitrary code in the context of a particular class or object. They're slightly similar to call, apply and bind in JavaScript, in that you are altering the value of self (this in JavaScript) when you use them. Let's take a look at some examples to demonstrate their usage.
+```ruby
+class Person
+end</p>
+
+<p>Person.class_eval do
+  def say_hello
+   "Hello!"
+  end
+end</p>
+
+<p>jimmy = Person.new
+jimmy.say_hello # "Hello!"
+<code>
+In this example, class_eval allows us to define a method within the Person class outside of its original definition and without reopening the class with the standard syntax. This could be useful when the class you want to add this method to is not known until runtime.
+</code>ruby
+class Person
+end</p>
+
+<p>Person.instance_eval do
+  def human?</p>
+
+<pre><code>true
+</code></pre>
+
+<p>  end
+end
+```
+Person.human? # true
+This example of instance_eval is similar, but evaluates the code in the context of an instance instead of a class. This is confusing at first, because in these examples class_eval creates instance methods and instance_eval creates class methods. There is reason behind the madness, however.</p>
+
+<p>class_eval is a method of the Module class, meaning that the receiver will be a module or a class. The block you pass to class_eval is evaluated in the context of that class. Defining a method with the standard def keyword within a class defines an instance method, and that's exactly what happens here.</p>
+
+<p>instance_eval, on the other hand, is a method of the Object class, meaning that the receiver will be an object. The block you pass to instance_eval is evaluated in the context of that object. That means that Person.instance_eval is evaluated in the context of the Person object. Remember that a class name is simply a constant which points to an instance of the class Class. Because of this fact, defining a method in the context of Class instance referenced by Person creates a class method for Person class.</p>
+
+<p>It may be difficult to wrap your mind around that if you're not familiar with the Ruby object model, but it's still easy to remember how these methods behave with a simple mnemonic device: when called on a class name constant, these two methods will allow you to create methods of the opposite type from their names. MyClass.class_eval will create instance methods and MyClass.instance_eval will create class methods.</p>
+
+<p>If you're interested in metaprogramming or understanding the Ruby object model, I'd definitely recommend the book. It's helped me out tremendously.</p>
+
+<p>I did some experiment with meta programming keywords "class_eval" and "instance_eval'. Sharing some of the examples with you all -</p>
+
+<p>class_eval opens the existing class and adds the methods as defined in an ordinary class, hence they work as instance methods of that class</p>
+
+<p>```ruby
+String.class_eval do
+  def quack</p>
+
+<pre><code>p 'quack method'
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>"any string".quack
+```</p>
+
+<p>A method defined for class A using class_eval will work as instance method of A
+```ruby
+class A
+end</p>
+
+<p>A.class_eval do
+  def some_method</p>
+
+<pre><code>p 'some_method'
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>A.new.some_method
+<code>
+instance_eval on a class will open the class as an instance of class Class. Any method defined will be treated as the method of this instance which is the class. Hence the methods work like class methods
+</code>ruby
+class A
+end</p>
+
+<p>A.instance_eval do
+  def other_method</p>
+
+<pre><code>p 'other_method'
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>A.other_method
+<code>
+instance_eval on an instance of a class will open that instance of the class. Thus it works like a singleton method that is specific to the instance and wont work for other instances of the class
+</code>ruby
+class A
+end</p>
+
+<p>a = A.new
+a.instance_eval do
+  def a_method</p>
+
+<pre><code>p 'a_method'
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>a.a_method  # works for 'a' on which the instance_eval is defined
+b = A.new
+b.a_method  # doesn't work for 'b'
+<code>
+ This is the same as calling instance_eval on the instance 'a' of class A. This again will define a singleton method on the instance
+</code>ruby
+class &lt;&lt; a
+  def show</p>
+
+<pre><code>p 'this is a method'
+</code></pre>
+
+<p>  end
+end
+a  = A.new
+a.show
+b.show  # doesn't work for 'b'
+<code>
+  Can not call 'class_eval' on an instance. class_eval can only be called on classes (which are instances of class Class)
+</code>ruby
+class A
+end</p>
+
+<p>a.class_eval do
+  def show_other</p>
+
+<pre><code>p 'this is another method'
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>a = A.new
+a.show
+b.show
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

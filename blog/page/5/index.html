@@ -1,0 +1,1011 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Ruby on Rails Blog</title>
+	<meta name="author" content="Ken Lu, Andrew Sheelan">
+
+	
+	<meta name="description" content="There are many other Selenium gems out there, but this is the only official, maintained gem. If you&#8217;re looking for a slightly higher level API &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Ruby on Rails Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Ruby on Rails Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:hlee.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:hlee.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/10/26/ruby-selenium-webdriver-watir-webdriver/">
+		
+			Ruby Selenium-webdriver Watir-webdriver</a>
+	</h2>
+	<div class="entry-content">
+		<p>There are many other Selenium gems out there, but this is the only official, maintained gem. If you&#8217;re looking for a slightly higher level API built on the same technology, you may want to check out <a href="http://watirwebdriver.com/">watir-webdriver</a> or <a href="https://github.com/jnicklas/capybara">capybara</a>.</p>
+
+<h2>example code</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s2">&quot;selenium-webdriver&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">driver</span> <span class="o">=</span> <span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">.</span><span class="n">for</span> <span class="ss">:firefox</span>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">navigate</span><span class="o">.</span><span class="n">to</span> <span class="s2">&quot;http://google.com&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="ss">:name</span><span class="p">,</span> <span class="s1">&#39;q&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">send_keys</span> <span class="s2">&quot;Hello WebDriver!&quot;</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">submit</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">puts</span> <span class="n">driver</span><span class="o">.</span><span class="n">title</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">quit</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># execute arbitrary javascript</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;return window.location.pathname&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># pass elements between Ruby and JavaScript</span>
+</span><span class='line'><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;return document.body&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;return arguments[0].tagName&quot;</span><span class="p">,</span> <span class="n">element</span><span class="p">)</span> <span class="c1">#=&gt; &quot;BODY&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># wait for a specific element to show up</span>
+</span><span class='line'><span class="n">wait</span> <span class="o">=</span> <span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">::</span><span class="no">Wait</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:timeout</span> <span class="o">=&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="c1"># seconds</span>
+</span><span class='line'><span class="n">wait</span><span class="o">.</span><span class="n">until</span> <span class="p">{</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="ss">:id</span> <span class="o">=&gt;</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># switch to a frame</span>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span> <span class="s2">&quot;some-frame&quot;</span> <span class="c1"># name or id</span>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">frame</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="ss">:id</span><span class="p">,</span> <span class="s1">&#39;some-frame&#39;</span><span class="p">)</span> <span class="c1"># frame element</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># switch back to the main document</span>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">switch_to</span><span class="o">.</span><span class="n">default_content</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># repositionning and resizing browser window:</span>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">move_to</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">resize_to</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+</span><span class='line'><span class="n">driver</span><span class="o">.</span><span class="n">manage</span><span class="o">.</span><span class="n">window</span><span class="o">.</span><span class="n">maximize</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># get an attribute</span>
+</span><span class='line'><span class="n">class_name</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">attribute</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># is the element visible on the page?</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">displayed?</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># click the element</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">click</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># get the element location</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">location</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># scroll the element into view, then return its location</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">location_once_scrolled_into_view</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># get the width and height of an element</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">size</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># press space on an element - see Selenium::WebDriver::Keys for possible values</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">send_keys</span> <span class="ss">:space</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># get the text of an element</span>
+</span><span class='line'><span class="n">element</span><span class="o">.</span><span class="n">text</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>SSL Certificates</h2>
+
+<p>The Firefox driver ignores invalid SSL certificates by default. If this is not the behaviour you want, you can do:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">profile</span> <span class="o">=</span> <span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">::</span><span class="no">Firefox</span><span class="o">::</span><span class="no">Profile</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">profile</span><span class="o">.</span><span class="n">secure_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">driver</span> <span class="o">=</span> <span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">.</span><span class="n">for</span> <span class="ss">:firefox</span><span class="p">,</span> <span class="ss">:profile</span> <span class="o">=&gt;</span> <span class="n">profile</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There is an edge case where the default SSL certificate check will not work correctly. WebDriver assumes that the certificate is untrusted whenever there&#8217;s a problem, which means a certificate from a trusted issuer but with a hostname mismatch (e.g. a production certificate in a test environment) will not be correctly ovverriden. See UntrustedSSLCertificates for more on why this is. To work around it, tell the Firefox driver to not assume the issuer is untrusted:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">profile</span> <span class="o">=</span> <span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">::</span><span class="no">Firefox</span><span class="o">::</span><span class="no">Profile</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">profile</span><span class="o">.</span><span class="n">assume_untrusted_certificate_issuer</span> <span class="o">=</span> <span class="kp">false</span>
+</span><span class='line'><span class="n">driver</span> <span class="o">=</span> <span class="no">Selenium</span><span class="o">::</span><span class="no">WebDriver</span><span class="o">.</span><span class="n">for</span> <span class="ss">:firefox</span><span class="p">,</span> <span class="ss">:profile</span> <span class="o">=&gt;</span> <span class="n">profile</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Not that Profile#secure_ssl remains set to the default value of true in the above example<a href="http://code.google.com/p/selenium/wiki/RubyBindings">.</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-10-26T08:12:00-04:00" pubdate data-updated="true">Oct 26<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/rspec/'>rspec</a>, <a class='category' href='/blog/categories/selenium-webdriver/'>selenium-webdriver</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2011/10/26/ruby-selenium-webdriver-watir-webdriver//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/02/02/create-ruby-dynamic-class/">
+		
+			Create Ruby Dynamic Class</a>
+	</h2>
+	<div class="entry-content">
+		<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dynamic_name</span> <span class="o">=</span> <span class="s2">&quot;TestEval2&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">const_set</span><span class="p">(</span><span class="n">dynamic_name</span><span class="p">,</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'><span class="n">dummy2</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">dynamic_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;dummy2: </span><span class="si">#{</span><span class="n">dummy2</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dynamic_name</span> <span class="o">=</span> <span class="s2">&quot;ClassName&quot;</span>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">const_set</span><span class="p">(</span><span class="n">dynamic_name</span><span class="p">,</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="k">def</span> <span class="nf">method1</span><span class="p">()</span> <span class="mi">42</span> <span class="k">end</span> <span class="p">})</span>
+</span><span class='line'><span class="no">ClassName</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">method1</span> <span class="c1">#=&gt; 42</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">class_name</span> <span class="o">=</span> <span class="s1">&#39;foo&#39;</span><span class="o">.</span><span class="n">capitalize</span>
+</span><span class='line'><span class="n">klass</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">const_set</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span><span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">names</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;instance1&#39;</span><span class="p">,</span> <span class="s1">&#39;instance2&#39;</span><span class="o">]</span> <span class="c1"># Array of instance vars</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">klass</span><span class="o">.</span><span class="n">class_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="o">*</span><span class="n">names</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">define_method</span><span class="p">(</span><span class="ss">:initialize</span><span class="p">)</span> <span class="k">do</span> <span class="o">|*</span><span class="n">values</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">names</span><span class="o">.</span><span class="n">each_with_index</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>      <span class="nb">instance_variable_set</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="o">+</span><span class="nb">name</span><span class="p">,</span> <span class="n">values</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># more...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>class_eval and const_set are used.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">a_new_class</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Object</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:x</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">print</span> <span class="c1">#{self.class} initialized with #{x}&quot;</span>
+</span><span class='line'>    <span class="vi">@x</span> <span class="o">=</span> <span class="n">x</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">SomeModule</span><span class="o">.</span><span class="n">const_set</span><span class="p">(</span><span class="s2">&quot;ClassName&quot;</span><span class="p">,</span> <span class="n">a_new_class</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">c</span> <span class="o">=</span> <span class="no">ClassName</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>without class_eval and const_set
+You don&#8217;t really need to use const_set. The return value of Class.new can be assigned to a constant and the block of Class.new is class_eval.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ass</span> <span class="no">Ancestor</span><span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="no">SomeClass</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Ancestor</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+</span><span class='line'>     <span class="nb">print</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2"> initialized with </span><span class="si">#{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="no">SomeClass</span>
+</span><span class='line'><span class="no">SomeClass</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># SomeClass initialized with foo=&gt; #&lt;SomeClass:0x668b68&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The following code uses a class factory to create a new class along with getter and setters for the fields passed into it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ClassFactory</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create_class</span><span class="p">(</span><span class="n">new_class</span><span class="p">,</span> <span class="o">*</span><span class="n">fields</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">c</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">fields</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">field</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">define_method</span> <span class="n">field</span><span class="o">.</span><span class="n">intern</span> <span class="k">do</span>
+</span><span class='line'>          <span class="nb">instance_variable_get</span><span class="p">(</span><span class="s2">&quot;@</span><span class="si">#{</span><span class="n">field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>        <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">field</span><span class="si">}</span><span class="s2">=&quot;</span><span class="o">.</span><span class="n">intern</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span>
+</span><span class='line'>          <span class="nb">instance_variable_set</span><span class="p">(</span><span class="s2">&quot;@</span><span class="si">#{</span><span class="n">field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="no">Kernel</span><span class="o">.</span><span class="n">const_set</span> <span class="n">new_class</span><span class="p">,</span> <span class="n">c</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">ClassFactory</span><span class="o">.</span><span class="n">create_class</span> <span class="s2">&quot;Car&quot;</span><span class="p">,</span> <span class="s2">&quot;make&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">new_class</span> <span class="o">=</span> <span class="no">Car</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">new_class</span><span class="o">.</span><span class="n">make</span> <span class="o">=</span> <span class="s2">&quot;Nissan&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">new_class</span><span class="o">.</span><span class="n">make</span> <span class="c1"># =&gt; &quot;Nissan&quot;</span>
+</span><span class='line'><span class="n">new_class</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;Maxima&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">new_class</span><span class="o">.</span><span class="n">model</span> <span class="c1"># =&gt; &quot;Maxima&quot;</span>
+</span><span class='line'><span class="n">new_class</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="s2">&quot;2001&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">new_class</span><span class="o">.</span><span class="n">year</span> <span class="c1"># =&gt; &quot;2001&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Ruby, classes are simply objects like any other, which are then assigned to a constant.  Hence, to create a new class dynamically we instantiate the class Class with Class.new, and then assign it to a constant via const_set (we invoke it on Kernel so that it is a top-level constant like any other class).  We then add the code that makes up the class in a do-end block.</p>
+
+<p>In that do-end block, for each field we invoke define_method twice, first for the getter method and then the setter method with get_instance_variable and set_instance_variable, respectively.  For each field, we create the instance variables (e.g., for make, we use @make).  Note how we make use of passing the argument in for the setter.</p>
+
+<p>Additionally, if I wanted to make the class a sub-class, I could have used Class.new(parent_class)</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T18:24:00-05:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/class/'>class</a>, <a class='category' href='/blog/categories/dynamic/'>dynamic</a>, <a class='category' href='/blog/categories/metaprogramming/'>metaprogramming</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2011/02/02/create-ruby-dynamic-class//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/07/20/basic-metaprogramming-ruby-class-eval-and-instance-eval/">
+		
+			Basic Metaprogramming Ruby Class_eval and Instance_eval</a>
+	</h2>
+	<div class="entry-content">
+		<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">A</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create_method</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">instance_eval</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">define_method</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">&quot;Nice!  I&#39;m </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">}</span>
+</span><span class='line'>      <span class="k">def</span> <span class="nf">human?</span>
+</span><span class='line'>        <span class="kp">true</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create_class_method</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">instance_eval</span> <span class="k">do</span>
+</span><span class='line'>      <span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">send</span><span class="p">(</span> <span class="ss">:define_method</span><span class="p">,</span> <span class="nb">name</span><span class="p">)</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">&quot;Nice!  I&#39;m </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">create_instance_method</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span><span class="p">;</span> <span class="nb">self</span><span class="p">;</span> <span class="k">end</span><span class="p">)</span><span class="o">.</span><span class="n">class_eval</span> <span class="k">do</span>
+</span><span class='line'>      <span class="c1">#self.class.send( :define_method, name) { puts &quot;Nice!  I&#39;m #{name}&quot; }</span>
+</span><span class='line'>      <span class="n">define_method</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">&quot;Nice!  I&#39;m </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sometimes when the book explains a concept or Ruby feature, it sheds light on things I&#8217;ve seen in other people&#8217;s code – things I&#8217;ve always wondered about. One such example is class_eval and instance_eval. These methods allow you to evaluate arbitrary code in the context of a particular class or object. They&#8217;re slightly similar to call, apply and bind in JavaScript, in that you are altering the value of self (this in JavaScript) when you use them. Let&#8217;s take a look at some examples to demonstrate their usage.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Person</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Person</span><span class="o">.</span><span class="n">class_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">say_hello</span>
+</span><span class='line'>   <span class="s2">&quot;Hello!&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">jimmy</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">jimmy</span><span class="o">.</span><span class="n">say_hello</span> <span class="c1"># &quot;Hello!&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, class_eval allows us to define a method within the Person class outside of its original definition and without reopening the class with the standard syntax. This could be useful when the class you want to add this method to is not known until runtime.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Person</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Person</span><span class="o">.</span><span class="n">instance_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">human?</span>
+</span><span class='line'>    <span class="kp">true</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Person.human? # true
+This example of instance_eval is similar, but evaluates the code in the context of an instance instead of a class. This is confusing at first, because in these examples class_eval creates instance methods and instance_eval creates class methods. There is reason behind the madness, however.</p>
+
+<p>class_eval is a method of the Module class, meaning that the receiver will be a module or a class. The block you pass to class_eval is evaluated in the context of that class. Defining a method with the standard def keyword within a class defines an instance method, and that&#8217;s exactly what happens here.</p>
+
+<p>instance_eval, on the other hand, is a method of the Object class, meaning that the receiver will be an object. The block you pass to instance_eval is evaluated in the context of that object. That means that Person.instance_eval is evaluated in the context of the Person object. Remember that a class name is simply a constant which points to an instance of the class Class. Because of this fact, defining a method in the context of Class instance referenced by Person creates a class method for Person class.</p>
+
+<p>It may be difficult to wrap your mind around that if you&#8217;re not familiar with the Ruby object model, but it&#8217;s still easy to remember how these methods behave with a simple mnemonic device: when called on a class name constant, these two methods will allow you to create methods of the opposite type from their names. MyClass.class_eval will create instance methods and MyClass.instance_eval will create class methods.</p>
+
+<p>If you&#8217;re interested in metaprogramming or understanding the Ruby object model, I&#8217;d definitely recommend the book. It&#8217;s helped me out tremendously.</p>
+
+<p>I did some experiment with meta programming keywords &#8220;class_eval&#8221; and &#8220;instance_eval&#8217;. Sharing some of the examples with you all -</p>
+
+<p>class_eval opens the existing class and adds the methods as defined in an ordinary class, hence they work as instance methods of that class</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">String</span><span class="o">.</span><span class="n">class_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">quack</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;quack method&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="s2">&quot;any string&quot;</span><span class="o">.</span><span class="n">quack</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A method defined for class A using class_eval will work as instance method of A</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">A</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">class_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">some_method</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;some_method&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">some_method</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>instance_eval on a class will open the class as an instance of class Class. Any method defined will be treated as the method of this instance which is the class. Hence the methods work like class methods</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">A</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">instance_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">other_method</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;other_method&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">other_method</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>instance_eval on an instance of a class will open that instance of the class. Thus it works like a singleton method that is specific to the instance and wont work for other instances of the class</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">A</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">a</span><span class="o">.</span><span class="n">instance_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">a_method</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;a_method&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">a</span><span class="o">.</span><span class="n">a_method</span>  <span class="c1"># works for &#39;a&#39; on which the instance_eval is defined</span>
+</span><span class='line'><span class="n">b</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">b</span><span class="o">.</span><span class="n">a_method</span>  <span class="c1"># doesn&#39;t work for &#39;b&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p> This is the same as calling instance_eval on the instance &#8216;a&#8217; of class A. This again will define a singleton method on the instance</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="n">a</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">show</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;this is a method&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">a</span>  <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">a</span><span class="o">.</span><span class="n">show</span>
+</span><span class='line'><span class="n">b</span><span class="o">.</span><span class="n">show</span>  <span class="c1"># doesn&#39;t work for &#39;b&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>  Can not call &#8216;class_eval&#8217; on an instance. class_eval can only be called on classes (which are instances of class Class)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">A</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">a</span><span class="o">.</span><span class="n">class_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">show_other</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;this is another method&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">a</span><span class="o">.</span><span class="n">show</span>
+</span><span class='line'><span class="n">b</span><span class="o">.</span><span class="n">show</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-20T19:21:00-04:00" pubdate data-updated="true">Jul 20<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/class-eval/'>class_eval</a>, <a class='category' href='/blog/categories/instance-eval/'>instance_eval</a>, <a class='category' href='/blog/categories/metaprogramming/'>metaprogramming</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2010/07/20/basic-metaprogramming-ruby-class-eval-and-instance-eval//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/03/25/learn-by-practice-extend-and-include/">
+		
+			Learn by Practice Extend and Include</a>
+	</h2>
+	<div class="entry-content">
+		<p>Here is some examples to help understand extend and include</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">M_A</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">test</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="kp">true</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">M_B</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">test</span>
+</span><span class='line'>    <span class="nb">puts</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">A</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">M_A</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">meta_class</span>
+</span><span class='line'>    <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="n">A</span><span class="p">;</span> <span class="nb">self</span><span class="p">;</span> <span class="k">end</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">test</span>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">test</span>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">instance_methods</span><span class="o">.</span><span class="n">grep</span> <span class="sr">/test/</span>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">meta_class</span><span class="o">.</span><span class="n">singleton_methods</span><span class="o">.</span><span class="n">grep</span> <span class="sr">/test/</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">A</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">M_B</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">A</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">test</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">B</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">B</span><span class="o">.</span><span class="nf">meta_class</span>
+</span><span class='line'>    <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="n">B</span><span class="p">;</span> <span class="nb">self</span><span class="p">;</span> <span class="k">end</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">meta_class2</span>
+</span><span class='line'>      <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="n">B</span><span class="p">;</span> <span class="nb">self</span><span class="p">;</span> <span class="k">end</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">B</span><span class="o">.</span><span class="n">extend</span> <span class="no">M_A</span>
+</span><span class='line'><span class="n">B</span><span class="o">.</span><span class="n">test</span>
+</span><span class='line'><span class="n">B</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">test</span>
+</span><span class='line'><span class="n">B</span><span class="o">.</span><span class="n">singleton_methods</span><span class="o">.</span><span class="n">grep</span> <span class="sr">/test/</span>
+</span><span class='line'><span class="n">B</span><span class="o">.</span><span class="n">meta_class</span><span class="o">.</span><span class="n">instance_methods</span><span class="o">.</span><span class="n">grep</span> <span class="sr">/test/</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So class have singleton_methods, that should live in the meta_class and that method should be a instance method there
+extend just put test method to meta class. then later one will cover the first one</p>
+
+<p>result</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="mi">1</span><span class="o">.</span><span class="mi">9</span><span class="o">.</span><span class="mi">3</span><span class="n">p327</span> <span class="p">:</span><span class="mo">04</span><span class="mi">8</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">.</span><span class="n">test</span>
+</span><span class='line'><span class="no">NoMethodError</span><span class="p">:</span> <span class="kp">private</span> <span class="nb">method</span> <span class="sb">`test&#39; called for A:Class</span>
+</span><span class='line'><span class="sb">    from (irb):48</span>
+</span><span class='line'><span class="sb">    from /home/rharrington/.rvm/rubies/ruby-1.9.3-p327/bin/irb:16:in `</span><span class="o">&lt;</span><span class="n">main</span><span class="o">&gt;</span><span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">1.9.3p327 :049 &gt; A.new.test</span>
+</span><span class='line'><span class="s1">false</span>
+</span><span class='line'><span class="s1"> =&gt; nil </span>
+</span><span class='line'><span class="s1">1.9.3p327 :050 &gt; A.instance_methods.grep /test/</span>
+</span><span class='line'><span class="s1"> =&gt; [:test] </span>
+</span><span class='line'><span class="s1">1.9.3p327 :051 &gt; A.new.meta_class.singleton_methods.grep /test/</span>
+</span><span class='line'><span class="s1"> =&gt; [] </span>
+</span><span class='line'><span class="s1">1.9.3p327 :052 &gt; B.extend M_A</span>
+</span><span class='line'><span class="s1"> =&gt; B </span>
+</span><span class='line'><span class="s1">1.9.3p327 :053 &gt; B.test</span>
+</span><span class='line'><span class="s1">true</span>
+</span><span class='line'><span class="s1"> =&gt; nil </span>
+</span><span class='line'><span class="s1">1.9.3p327 :054 &gt; B.new.test</span>
+</span><span class='line'><span class="s1">NoMethodError: private method `test&#39;</span> <span class="n">called</span> <span class="k">for</span> <span class="c1">#&lt;B:0x0000000088c5e8&gt;</span>
+</span><span class='line'>    <span class="n">from</span> <span class="p">(</span><span class="n">irb</span><span class="p">):</span><span class="mi">54</span>
+</span><span class='line'>    <span class="n">from</span> <span class="sr">/home/</span><span class="n">rharrington</span><span class="o">/.</span><span class="n">rvm</span><span class="o">/</span><span class="n">rubies</span><span class="o">/</span><span class="n">ruby</span><span class="o">-</span><span class="mi">1</span><span class="o">.</span><span class="mi">9</span><span class="o">.</span><span class="mi">3</span><span class="o">-</span><span class="n">p327</span><span class="o">/</span><span class="n">bin</span><span class="o">/</span><span class="n">irb</span><span class="p">:</span><span class="mi">16</span><span class="ss">:in</span> <span class="sb">`&lt;main&gt;&#39;</span>
+</span><span class='line'><span class="sb">1.9.3p327 :055 &gt; B.singleton_methods.grep /test/</span>
+</span><span class='line'><span class="sb"> =&gt; [:test] </span>
+</span><span class='line'><span class="sb">1.9.3p327 :056 &gt; B.meta_class.instance_methods.grep /test/</span>
+</span><span class='line'><span class="sb"> =&gt; [:test] </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-25T18:07:00-04:00" pubdate data-updated="true">Mar 25<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/extend/'>extend</a>, <a class='category' href='/blog/categories/include/'>include</a>, <a class='category' href='/blog/categories/metaprogram/'>metaprogram</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2010/03/25/learn-by-practice-extend-and-include//blog/page/5/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/4/" class="prev">Prev</a>
+    
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    Ken Lu, Andrew Sheelan
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'guest';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

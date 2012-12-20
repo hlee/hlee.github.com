@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: environments | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/environments/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Initializing Custom YML Configuration Variables for Different Environments in Rails]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/26/initializing-custom-yml-configuration-variables-for-environments-in-rails/"/>
+    <updated>2012-11-26T22:22:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/26/initializing-custom-yml-configuration-variables-for-environments-in-rails</id>
+    <content type="html"><![CDATA[<p>Another common problem that rails developers face while developing web
+applications that connect to multiple external systems and api's is configuring
+the the same parameters for different environments.</p>
+
+<p>The simplest way -</p>
+
+<ul>
+<li><p>Add a folder to the config folder of your application</p></li>
+<li><p>Add all the configuration in as a yml file, like how we use the database.yml
+ with all the environments in it</p></li>
+</ul>
+
+
+<p>sample file: config/google_api.yml</p>
+
+<p><code>yml
+development: &amp;default_settings
+  google_analytics_id: 'UA-xxxxxxxx-1'
+test:
+  &lt;&lt;: *default_settings
+sandbox:
+  google_analytics_id: 'UA-xxxxxxxx-2'
+staging:
+  google_analytics_id: 'UA-xxxxxxxx-3'
+production:
+  google_analytics_id: 'UA-xxxxxxxx-4'
+</code>
+  the &amp;default_settings and *default_settings can be used to pass the same
+  values into another yml</p>
+
+<ul>
+<li><p>add the following to your rb file:</p>
+
+<p>File: config/environment.rb</p></li>
+</ul>
+
+
+<p>```ruby</p>
+
+<h1>Load the rails application</h1>
+
+<p>require File.expand_path('../application', <strong>FILE</strong>)</p>
+
+<h1>Auto Load APP_CONFIG for the corresponding environment configuration</h1>
+
+<p>APP_CONFIG = HashWithIndifferentAccess.new
+load_files = Dir["#{Rails.root}/config/app_config/*.yml"].each do |file|
+  APP_CONFIG.merge!(YAML.load_file(file)[Rails.env])
+end</p>
+
+<h1>Initialize the rails application</h1>
+
+<p>Livegamer::Application.initialize!</p>
+
+<p>```</p>
+
+<p>  The above code adds all the yml files inside the folder we created(app_config) under the config folder to a
+  hash(APP_CONFIG).</p>
+
+<ul>
+<li>Now we can use get the google analytics id with the following</li>
+</ul>
+
+
+<p><code>ruby
+google_id = APP_CONFIG['google_analytics_id']
+</code></p>
+
+<p>  This would return the corresponding configuration variable depending upon the
+  environment.</p>
+
+<p>  Simple.. :)</p>
+
+<p>  Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

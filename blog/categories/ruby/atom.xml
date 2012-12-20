@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ruby timeout]]></title>
+    <link href="http://hlee.github.com/blog/2012/12/09/ruby-timeout/"/>
+    <updated>2012-12-09T06:56:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/12/09/ruby-timeout</id>
+    <content type="html"><![CDATA[<h2>standard timeout</h2>
+
+<p><code>ruby
+require 'timeout'
+begin
+  complete_results = Timeout.timeout(1) do      
+   sleep(2)
+  end
+rescue Timeout::Error
+  puts 'Print me something please'
+end
+</code></p>
+
+<p>sometime, the code inner with begin will catch exception
+such as:
+```ruby
+require 'timeout'</p>
+
+<p>puts "#{Time.now}: Starting"
+begin
+  Timeout.timeout(5) do</p>
+
+<pre><code>begin
+  sleep 10
+rescue Exception =&gt; e
+  puts "#{Time.now}: Caught an exception: #{e.inspect}"
+end
+sleep 10
+</code></pre>
+
+<p>  end
+rescue Timeout::Error => e
+  puts "#{Time.now}: Timeout: #{e}"
+else
+  puts "#{Time.now}: Never timed out."
+end
+<code>
+so new a thread, as ruby 1.9 thread is native
+</code>ruby
+begin
+  complete_results = Timeout.timeout(4) do</p>
+
+<pre><code>Thread.new{ results = platform.search(artist, album_name) }.value
+</code></pre>
+
+<p>  end
+rescue Timeout::Error
+  puts 'Print me something please'
+end
+```</p>
+
+<h2>implementation</h2>
+
+<p>```ruby</p>
+
+<h1>From lib/timeout.rb</h1>
+
+<p>def timeout(sec, exception=Error)
+  return yield if sec == nil or sec.zero?
+  raise ThreadError, "timeout within critical session" if Thread.critical
+  begin</p>
+
+<pre><code>x = Thread.current
+y = Thread.start {
+  sleep sec
+  x.raise exception, "execution expired" if x.alive?
+}
+yield sec
+#    return true
+</code></pre>
+
+<p>  ensure</p>
+
+<pre><code>y.kill if y and y.alive?
+</code></pre>
+
+<p>  end
+end
+```
+system timer only for 1.8<a href="http://ph7spot.com/musings/system-timer">.</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[capybara webkit or selenium or watir to simulate browser behavior]]></title>
+    <link href="http://hlee.github.com/blog/2012/12/06/capybara-webkit-or-selenium-or-watir-to-simulate-browser-behavior/"/>
+    <updated>2012-12-06T15:29:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/12/06/capybara-webkit-or-selenium-or-watir-to-simulate-browser-behavior</id>
+    <content type="html"><![CDATA[<p>Sometimes we want to simulate browser behavior. The situation can be test or automation script.</p>
+
+<h2>install capybara-webkit</h2>
+
+<p>```ruby</p>
+
+<h1>capybara-webkit need qt</h1>
+
+<h1>ubuntu</h1>
+
+<p>sudo aptitude install libqt4-dev
+```</p>
+
+<h2>using capybara dsl</h2>
+
+<p>```ruby
+require 'capybara'
+require 'capybara/dsl'</p>
+
+<p>Capybara.default_driver = :webkit</p>
+
+<p>module MyModule
+  include Capybara::DSL</p>
+
+<p>  def login!</p>
+
+<pre><code>within("//form[@id='session']") do
+  fill_in 'Login', :with =&gt; 'user@example.com'
+  fill_in 'Password', :with =&gt; 'password'
+  fill_in('First Name', :with =&gt; 'John')
+  fill_in('Password', :with =&gt; 'Seekrit')
+  fill_in('Description', :with =&gt; 'Really Long Text...')
+  choose('A Radio Button')
+  check('A Checkbox')
+  uncheck('A Checkbox')
+  attach_file('Image', '/path/to/image.jpg')
+  select('Option', :from =&gt; 'Select Box')
+  end
+  click_link 'Sign in'
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h2>Debugging</h2>
+
+<p>It can be useful to take a snapshot of the page as it currently is and take a
+look at it:</p>
+
+<p><code>ruby
+save_and_open_page
+</code></p>
+
+<p>You can also retrieve the current state of the DOM as a string using
+<tt><a href="http://rubydoc.info/github/jnicklas/capybara/master/Capybara/Session#html-instance_method">page.html</a></tt>.</p>
+
+<p><code>ruby
+print page.html
+</code></p>
+
+<p>This is mostly useful for debugging. You should avoid testing against the
+contents of <code>page.html</code> and use the more expressive finder methods instead.</p>
+
+<p>Finally, in drivers that support it, you can save a screenshot:</p>
+
+<p><code>ruby
+page.save_screenshot('screenshot.png')
+</code></p>
+
+<h2>Calling remote servers</h2>
+
+<p>Normally Capybara expects to be testing an in-process Rack application, but you
+can also use it to talk to a web server running anywhere on the internets, by
+setting app_host:</p>
+
+<p><code>ruby
+Capybara.current_driver = :selenium
+Capybara.app_host = 'http://www.google.com'
+...
+visit('/')
+</code></p>
+
+<p><strong>Note</strong>: the default driver (<code>:rack_test</code>) does not support running
+against a remote server. With drivers that support it, you can also visit any
+URL directly:</p>
+
+<p><code>ruby
+visit('http://www.google.com')
+</code></p>
+
+<p>By default Capybara will try to boot a rack application automatically. You
+might want to switch off Capybara's rack server if you are running against a
+remote application:</p>
+
+<p><code>ruby
+Capybara.run_server = false
+</code></p>
+
+<h2>Using the sessions manually</h2>
+
+<p>For ultimate control, you can instantiate and use a
+<a href="http://rubydoc.info/github/jnicklas/capybara/master/Capybara/Session">Session</a>
+manually.</p>
+
+<p>```ruby
+require 'capybara'</p>
+
+<p>session = Capybara::Session.new(:webkit, my_rack_app)
+session.within("//form[@id='session']") do
+  session.fill_in 'Login', :with => 'user@example.com'
+  session.fill_in 'Password', :with => 'password'
+end
+session.click_link 'Sign in'
+```</p>
+
+<h2>XPath, CSS and selectors</h2>
+
+<p>Capybara does not try to guess what kind of selector you are going to give it,
+and will always use CSS by default.  If you want to use XPath, you'll need to
+do:</p>
+
+<p><code>ruby
+within(:xpath, '//ul/li') { ... }
+find(:xpath, '//ul/li').text
+find(:xpath, '//li[contains(.//a[@href = "#"]/text(), "foo")]').value
+</code></p>
+
+<p>Alternatively you can set the default selector to XPath:</p>
+
+<p><code>ruby
+Capybara.default_selector = :xpath
+find('//ul/li').text
+</code></p>
+
+<p>Capybara allows you to add custom selectors, which can be very useful if you
+find yourself using the same kinds of selectors very often:</p>
+
+<p>```ruby
+Capybara.add_selector(:id) do
+  xpath { |id| XPath.descendant[XPath.attr(:id) == id.to_s] }
+end</p>
+
+<p>Capybara.add_selector(:row) do
+  xpath { |num| ".//tbody/tr[#{num}]" }
+end</p>
+
+<p>Capybara.add_selector(:flash_type) do
+  css { |type| "#flash.#{type}" }
+end
+```</p>
+
+<p>The block given to xpath must always return an XPath expression as a String, or
+an XPath expression generated through the XPath gem. You can now use these
+selectors like this:</p>
+
+<p><code>ruby
+find(:id, 'post_123')
+find(:row, 3)
+find(:flash_type, :notice)
+</code></p>
+
+<p>You can specify an optional match option which will automatically use the
+selector if it matches the argument:</p>
+
+<p><code>ruby
+Capybara.add_selector(:id) do
+  xpath { |id| XPath.descendant[XPath.attr(:id) == id.to_s] }
+  match { |value| value.is_a?(Symbol) }
+end
+</code></p>
+
+<p>Now use it like this:</p>
+
+<p><code>ruby
+find(:post_123)
+</code></p>
+
+<p>This :id selector is already built into Capybara by default, so you don't
+need to add it yourself<a href="https://github.com/jnicklas/capybara">.</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[generate random string in ruby]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/generate-random-string-in-ruby/"/>
+    <updated>2012-11-28T22:39:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/generate-random-string-in-ruby</id>
+    <content type="html"><![CDATA[<p>Sometimes we need to generate a 'n' character random string.</p>
+
+<p>Here are a few:</p>
+
+<ul>
+<li><strong>Only upper case alphabets [A-Z]</strong></li>
+</ul>
+
+
+<p>```ruby
+value = "";
+8.times{value  &lt;&lt; (65 + rand(25)).chr} >>}</p>
+
+<h1>or</h1>
+
+<p>(0...8).map{65.+(rand(26)).chr}.join
+(0...8).map{ ('A'..'Z').to_a[rand(26)]  }.join
+```</p>
+
+<ul>
+<li><strong>Lower case and upper case [a-zA-Z]</strong></li>
+</ul>
+
+
+<p>```ruby
+value = "";
+8.times{value &lt;&lt; ((rand(2)==1?65:97) + rand(25)).chr} >>}</p>
+
+<h1>or</h1>
+
+<p>o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten
+string  =  (0...50).map{ o[rand(o.length)]  }.join
+```</p>
+
+<ul>
+<li><strong>Using SecureRandom provided by ActiveSupport</strong></li>
+</ul>
+
+
+<p>```ruby
+require 'active_support/secure_random'
+random_string = ActiveSupport::SecureRandom.hex(16)</p>
+
+<h1>outputs: 5b5cd0da3121fc53b4bc84d0c8af2e81</h1>
+
+<p>```</p>
+
+<ul>
+<li>SecureRandom also has methods for:</li>
+</ul>
+
+
+<p>base64</p>
+
+<ol>
+<li>hex</li>
+<li>random_bytes</li>
+<li>random_number</li>
+</ol>
+
+
+<p><a href="http://api.rubyonrails.org/v3.0.9/classes/ActiveSupport/SecureRandom.html">see:</a></p>
+
+<ul>
+<li><strong>It is also important to avoid Ambiguity</strong></li>
+</ul>
+
+
+<p>```ruby</p>
+
+<h1>Generates a random string from a set of easily readable characters</h1>
+
+<p>def generate_activation_code(size = 6)
+  charset = %w{ 2 3 4 6 7 9 A C D E F G H J K M N P Q R T V W X Y Z}
+  (0...size).map{ charset.to_a[rand(charset.size)] }.join
+end
+```</p>
+
+<ul>
+<li><strong>Random URL Friendly Strings</strong></li>
+</ul>
+
+
+<p><code>ruby
+rand(36**length).to_s(36)
+</code></p>
+
+<ul>
+<li><strong>One more example with SecureRandom</strong></li>
+</ul>
+
+
+<p><code>ruby
+require 'securerandom'
+s = SecureRandom.urlsafe_base64(20)
+</code></p>
+
+<ul>
+<li><strong>Creating a Random string with arguments</strong></li>
+</ul>
+
+
+<p><code>ruby
+def random_string(length=10)
+  chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  password = ''
+  length.times { password &lt;&lt; chars[rand(chars.size)] }
+  password
+end
+</code></p>
+
+<ul>
+<li><strong>This example works Only in ruby 1.9</strong></li>
+</ul>
+
+
+<p>```ruby
+[*('A'..'Z')].sample(8).join</p>
+
+<h1>Generate a random 8 letter string (e.g. NVAYXHGR)</h1>
+
+<p>([<em>('A'..'Z'),</em>('0'..'9')]-%w(0 1 I O)).sample(8).join</p>
+
+<h1>Generate a random 8 character string (e.g. 3PH4SWF2), excludes 0/1/I/O. Ruby 1.9</h1>
+
+<p>ALPHABET = ('a'..'z').to_a
+10.times.map{ ALPHABET.sample }.join
+10.times.inject(''){|s| s &lt;&lt; ALPHABET.sample }
+```</p>
+
+<ul>
+<li><strong>Here's one using digest sha1</strong></li>
+</ul>
+
+
+<p><code>ruby
+require 'sha1'
+srand
+seed = "--#{rand(10000)}--#{Time.now}--"
+Digest::SHA1.hexdigest(seed)[0,8]
+</code></p>
+
+<ul>
+<li><p><strong>Here are more examples to help</strong></p></li>
+<li><p>Example 1</p></li>
+</ul>
+
+
+<p>```ruby
+rand(2**256).to_s(36)[0..7]</p>
+
+<h1>Add ljust if you are really paranoid about the correct string length:</h1>
+
+<p>rand(2**256).to_s(36).ljust(8,'a')[0..7]
+characters = ('a'..'z').to_a + ('A'..'Z').to_a</p>
+
+<h1>Prior to 1.9, use .choice, not .sample</h1>
+
+<p>(0..8).map{characters.sample}.join
+(0...8).collect { |n| value  &lt;&lt; (65 + rand(25)).chr }.join()
+```</p>
+
+<ul>
+<li>Example 2</li>
+</ul>
+
+
+<p>```ruby
+def generate_random_string(length=6)
+  string = ""
+  chars = ("A".."Z").to_a
+  length.times do</p>
+
+<pre><code>string &lt;&lt; chars[rand(chars.length-1)]
+</code></pre>
+
+<p>  end
+  string
+end
+```</p>
+
+<ul>
+<li><p>Example 3
+```ruby
+chars = [<em>('a'..'z'),</em>('0'..'9')].flatten</p>
+
+<h1>Single expression, can be passed as an argument, allows duplicate characters:</h1>
+
+<p>Array.new(len) {|i| chars.sample}.join
+```</p></li>
+<li><p>Example 4</p></li>
+</ul>
+
+
+<p><code>ruby
+def token(length=16)
+  chars = [*('A'..'Z'), *('a'..'z'), *(0..9)]
+  (0..length).map {chars.sample}.join
+end
+</code></p>
+
+<ul>
+<li><p>Example 5
+<code>ruby
+''.tap {|v| 4.times { v &lt;&lt; ('a'..'z').to_a.sample} }
+</code></p></li>
+<li><p>Example 6
+```ruby
+class String</p>
+
+<p>def self.random(length=10)
+  ('a'..'z').sort_by {rand}[0,length].join
+end</p></li>
+</ul>
+
+
+<p>end
+```</p>
+
+<ul>
+<li>Example 7
+```ruby
+(('a'..'z').to_a + ('A'..'Z').to_a + (0..9).to_a).sample(8).join</li>
+</ul>
+
+
+<p>([(48..57),(65..90),(97..122)]).sample(8).collect{|x|x.chr}""
+```</p>
+
+<ul>
+<li><p>Example 8
+```ruby
+def secure_random_string(length = 32, non_ambiguous = false)
+characters = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a</p>
+
+<p>%w{I O l 0 1}.each{ |ambiguous_character|
+  characters.delete ambiguous_character
+} if non_ambiguous</p>
+
+<p>(0...length).map{
+  characters[ActiveSupport::SecureRandom.random_number(characters.size)]
+}.join
+end
+```</p></li>
+<li><p>Example 9
+```ruby
+SecureRandom.base64(15).tr('+/=lIO0', 'pqrsxyz')</p>
+
+<h1>ruby 1.8 and unix</h1>
+
+<p>random_string = <code>openssl rand -base64 24</code>
+```</p></li>
+</ul>
+
+
+<p><a href="http://stackoverflow.com/questions/88311/how-best-to-generate-a-random-string-in-ruby">.</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[generate random number in ruby]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/generate-random-number-in-ruby/"/>
+    <updated>2012-11-28T22:27:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/generate-random-number-in-ruby</id>
+    <content type="html"><![CDATA[<p>Sometimes we would also need to generate x random numbers from n to m</p>
+
+<p><code>ruby
+x.times.map{n + Random.rand( m - n )}
+</code></p>
+
+<p>```ruby
+Random.new.rand(n...m)</p>
+
+<h1>in ruby 1.9.3</h1>
+
+<p>Random.rand(n...m)
+```</p>
+
+<p>if you only want to select a random item form array<a href="http://stackoverflow.com/questions/198460/how-to-get-a-random-number-in-ruby">.</a></p>
+
+<p><code>ruby
+%(a b c d e).sample
+(n...m).to_a.sample
+</code>
+Some other ways by using SecureRandom</p>
+
+<p>```ruby
+require 'securerandom'</p>
+
+<p>p SecureRandom.random_number(100) #=> 15
+p SecureRandom.random_number(100) #=> 88</p>
+
+<p>p SecureRandom.random_number #=> 0.596506046187744
+p SecureRandom.random_number #=> 0.350621695741409</p>
+
+<p>p SecureRandom.hex #=> "eb693ec8252cd630102fd0d0fb7c3485"
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Passing Command Line Arguments to Rake Tasks]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/pass-command-line-arguments-to-a-rake-task/"/>
+    <updated>2012-11-28T08:02:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/pass-command-line-arguments-to-a-rake-task</id>
+    <content type="html"><![CDATA[<p>Sometimes, we need to rake tasks that inserts a paticular user entered value into multiple databases.</p>
+
+<p>We'd like to be able to pass this value into the rake task from the command line, or from another rake task, how can We do this?</p>
+
+<p>```ruby
+require 'rake'</p>
+
+<p>task :my_task, :arg1, :arg2 do |t, args|
+  puts "Args were: #{args}"
+end
+```</p>
+
+<p>You can invoke it by using the following:</p>
+
+<p><code>ruby
+task :invoke_my_task do
+  Rake.application.invoke_task("my_task[1, 2]")
+end
+</code></p>
+
+<p>or if you prefer this syntax...</p>
+
+<p><code>ruby
+task :invoke_my_task_2 do
+  Rake::Task[:my_task].invoke(3, 4)
+end
+</code></p>
+
+<p>A task with prerequisites passes its arguments to it prerequisites(tasks)</p>
+
+<p><code>ruby
+task :with_prerequisite, :arg1, :arg2, :needs =&gt; :my_task
+</code></p>
+
+<p>or just a...</p>
+
+<p><code>ruby
+task :with_prerequisite, [:arg1, :arg2] =&gt; :my_task
+</code></p>
+
+<p>To specify default values, we take advantage of args being a Rake::TaskArguments object</p>
+
+<p><code>ruby
+task :with_defaults, :arg1, :arg2 do |t, args|
+  args.with_defaults(:arg1 =&gt; 1, :arg2 =&gt; 2)
+  puts "Args with defaults were: #{args}"
+end
+</code></p>
+
+<p>Here are a few usages:</p>
+
+<p>```sh</p>
+
+<blockquote><p>rake my_task[1,2]
+Args were: {:arg1=>"1", :arg2=>"2"}</p>
+
+<p>rake "my_task[1, 2]"
+Args were: {:arg1=>"1", :arg2=>"2"}</p>
+
+<p>rake invoke_my_task
+Args were: {:arg1=>"1", :arg2=>"2"}</p>
+
+<p>rake invoke_my_task_2
+Args were: {:arg1=>3, :arg2=>4}</p>
+
+<p>rake with_prerequisite[5,6]
+Args were: {:arg1=>"5", :arg2=>"6"}</p>
+
+<p>rake with_prerequisite_2[7,8]
+Args were: {:arg1=>"7", :arg2=>"8"}</p>
+
+<p>rake with_defaults
+Args with defaults were: {:arg1=>:default_1, :arg2=>:default_2}</p>
+
+<p>rake with_defaults['x','y']
+Args with defaults were: {:arg1=>"x", :arg2=>"y"}
+```</p></blockquote>
+
+<p><a href="http://rake.rubyforge.org/files/doc/rakefile_rdoc.html">For more information...</a></p>
+
+<p><a href="http://stackoverflow.com/questions/825748/how-do-i-pass-command-line-arguments-to-a-rake-task">.</a></p>
+
+<p>Any questions on this, please feel free to ask. We’re here to help…</p>
+]]></content>
+  </entry>
+  
+</feed>

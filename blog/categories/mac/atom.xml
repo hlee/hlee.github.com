@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: mac | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/mac/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Installing rvm on a Mac - Issues With gcc]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/install-rvm-at-mac-with-gcc-problem/"/>
+    <updated>2012-11-28T08:45:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/install-rvm-at-mac-with-gcc-problem</id>
+    <content type="html"><![CDATA[<p>While installing RVM on a mac, one of the major problems we face are due to missing Xcode. We usually get the error below:</p>
+
+<p>```sh</p>
+
+<pre><code>rvm install 1.9.3
+Installing Ruby from source to: /Users/jamie/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...
+
+ruby-1.9.3-p0 - #fetching 
+ruby-1.9.3-p0 - #extracted to /Users/jamie/.rvm/src/ruby-1.9.3-p0 (already extracted)
+Fetching yaml-0.1.4.tar.gz to /Users/jamie/.rvm/archives
+Extracting yaml-0.1.4.tar.gz to /Users/jamie/.rvm/src
+Configuring yaml in /Users/jamie/.rvm/src/yaml-0.1.4.
+Compiling yaml in /Users/jamie/.rvm/src/yaml-0.1.4.
+Installing yaml to /Users/jamie/.rvm/usr
+ruby-1.9.3-p0 - #configuring 
+ERROR: Error running ' ./configure --prefix=/Users/jamie/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/jamie/.rvm/usr ', please read /Users/jamie/.rvm/log/ruby-1.9.3-p0/configure.log
+ERROR: There has been an error while running configure. Halting the installation.
+</code></pre>
+
+<p>```</p>
+
+<p>The Error message also looks like this:</p>
+
+<p><code>sh
+rvm install 1.9.3
+ERROR: The autodetected CC(/usr/bin/gcc-4.2) is LLVM based, it is not yet fully supported by ruby and gems, please read `rvm requirements`, and set CC=/path/to/gcc .
+</code></p>
+
+<p>Find the GCC installed in Mac:</p>
+
+<p><code>sh
+gcc -v
+Using built-in specs.
+Target: i686-apple-darwin11
+Configured with: /private/var/tmp/llvmgcc42/llvmgcc42-2336.1~1/src/configure --disable-checking --enable-werror --prefix=/Developer/usr/llvm-gcc-4.2 --mandir=/share/man --enable-languages=c,objc,c++,obj-c++ --program-prefix=llvm- --program-transform-name=/^[cg][^.-]*$/s/$/-4.2/ --with-slibdir=/usr/lib --build=i686-apple-darwin11 --enable-llvm=/private/var/tmp/llvmgcc42/llvmgcc42-2336.1~1/dst-llvmCore/Developer/usr/local --program-prefix=i686-apple-darwin11- --host=x86_64-apple-darwin11 --target=i686-apple-darwin11 --with-gxx-include-dir=/usr/include/c++/4.2.1
+Thread model: posix
+gcc version 4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2336.1.00)
+</code></p>
+
+<p>also look for the files in user/bin</p>
+
+<p><code>sh
+ls /usr/bin | grep gcc
+gcc
+i686-apple-darwin11-llvm-gcc-4.2
+llvm-gcc
+llvm-gcc-4.2
+</code></p>
+
+<p>Here are a few ways to resolve this - read them all to get a better understanding of ways to fix issues like these:</p>
+
+<ul>
+<li>Install with clang</li>
+</ul>
+
+
+<p><code>sh
+rvm install 1.9.3 --with-gcc=clang
+</code></p>
+
+<ul>
+<li>Install a lighter version of gcc osx-gcc</li>
+</ul>
+
+
+<p><a href="https://github.com/kennethreitz/osx-gcc-installer/downloads">LLVM GCC</a></p>
+
+<p>Be carefull about this, sometimes there are conflicts with Brew</p>
+
+<ul>
+<li><p>The best of them all could still be to use the <a href="https://developer.apple.com/downloads/index.action">command line tools for xcode</a></p></li>
+<li><p>If you face issues with readline, its best to pkg install readline</p></li>
+</ul>
+
+
+<p><code>sh
+rvm pkg install readline
+rvm install 1.9.3 --with-gcc=clang --with-readline-dir=$rvm_path/usr
+</code></p>
+
+<ul>
+<li>(xcode 4.5) install RVM on Mac OSX 10.8 (Mountain Lion) with Xcode 4.5 <a href="https://gist.github.com/3789921">without installing Command Line Tools</a></li>
+</ul>
+
+
+<p><a href="http://stackoverflow.com/questions/8032824/cant-install-ruby-under-lion-with-rvm-gcc-issues">.</a></p>
+
+<p>Any questions on this, please feel free to ask. We’re here to help…</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Change Computer/Host Name Mac OsX]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/15/change-computer-slash-host-name-mac-osx/"/>
+    <updated>2012-11-15T22:27:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/15/change-computer-slash-host-name-mac-osx</id>
+    <content type="html"><![CDATA[<p>One of the most common problems that we come across is when the programmer tries to
+setup the Mac OS X - name/hostname for the computer, since it takes up most space
+in the Terminal bash prompt and since the default ones are not so fancy, when
+accessed over the network.</p>
+
+<ol>
+<li><p>Click the "Apple" menu in the top-left of the screen. Click on "System Preferences."</p></li>
+<li><p>Click the "Sharing" icon. At the top of the resulting screen, you will see your current computer name. To change it, click into the field, delete the existing name and enter your desired computer name.</p></li>
+<li><p>Click on the "Edit" button underneath the computer name field to change the local hostname. The hostname can be used to access your computer over the network as an alternative to using a numeric IP address and is particularly relevant if you are using a network with a mix of Apple Macs and Microsoft Windows PCs.</p></li>
+<li><p>Close the window to save your changes.</p></li>
+</ol>
+
+
+<p><a href="http://techtips.salon.com/change-apple-mac-computer-name-537.html">Source Link</a></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mountain Lion and Homebrew]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/12/mountain-lion-and-homebrew/"/>
+    <updated>2012-11-12T20:42:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/12/mountain-lion-and-homebrew</id>
+    <content type="html"><![CDATA[<p><a href="https://gist.github.com/1860902">SOURCE</a></p>
+
+<p>Get Mountain Lion and Homebrew to Be Happy:</p>
+
+<p>1) Install XCode 4.4 into /Applications</p>
+
+<p>Get it from the App Store.</p>
+
+<p>2) Install Command Line Tools</p>
+
+<p>In XCode's Preferences > Downloads you can install command line tools.</p>
+
+<p>3) Let Everyone Know Where XCode Is</p>
+
+<p><code>c
+sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+</code></p>
+
+<p>4) Install X11</p>
+
+<p>Visit http://xquartz.macosforge.org/trac/wiki and download and install 2.7.2+.</p>
+
+<p>You will need to fix the symlink it makes:</p>
+
+<p><code>sh
+ln -s /opt/X11 /usr/X11
+</code></p>
+
+<p>5) Reinstall your brews</p>
+
+<p><code>bash
+brew list
+</code></p>
+
+<p>Will tell you what you need to check. Try out everything one by one and when one doesn't work brew remove it and then reinstall it. If the install doesn't work, try brew install it --use-gcc to prevent llvm from getting in the way.
+You might need to install libxml2 and link it manually to make sure you don't get the wrong xml2-config if your path:</p>
+
+<p><code>bash
+brew install libxml2  
+brew link libxml2
+Run brew doctor and fix anything it tells you.
+</code></p>
+
+<p>You may also need to symlink gcc for certain ruby gems and other stuff like that:</p>
+
+<p><code>bash
+sudo ln -s /usr/bin/gcc /usr/bin/gcc-4.2
+</code></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[GCC command line tools]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/12/gcc-command-line-tools/"/>
+    <updated>2012-11-12T20:29:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/12/gcc-command-line-tools</id>
+    <content type="html"><![CDATA[<p>When the bundling gems fail in Mac OS X, Download the latest GCC standalone file from the link below:</p>
+
+<p><a href="https://github.com/kennethreitz/osx-gcc-installer/downloads">gcc standalone tools</a></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to proxy a domain to localhost]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/09/how-to-proxy-a-domain-as-local/"/>
+    <updated>2012-11-09T14:29:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/09/how-to-proxy-a-domain-as-local</id>
+    <content type="html"><![CDATA[<ul>
+<li>STEP 1:</li>
+</ul>
+
+
+<p>Edit your hosts file by typing:</p>
+
+<p><code>bash
+sudo vim /etc/hosts
+</code></p>
+
+<p>Add the following line to the file:</p>
+
+<p><code>bash
+127.0.0.1 google.com (or whatever other hostname you want proxied)
+</code></p>
+
+<ul>
+<li>STEP 2:</li>
+</ul>
+
+
+<p>Type the following into the command line to (ip foward)set up the server port to 80 in this case it is 3000:
+<code>bash
+sudo ipfw add 100 fwd 127.0.0.1,3000 tcp from any to any 80 in
+</code></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: timeout | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/timeout/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[ruby timeout]]></title>
+    <link href="http://hlee.github.com/blog/2012/12/09/ruby-timeout/"/>
+    <updated>2012-12-09T06:56:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/12/09/ruby-timeout</id>
+    <content type="html"><![CDATA[<h2>standard timeout</h2>
+
+<p><code>ruby
+require 'timeout'
+begin
+  complete_results = Timeout.timeout(1) do      
+   sleep(2)
+  end
+rescue Timeout::Error
+  puts 'Print me something please'
+end
+</code></p>
+
+<p>sometime, the code inner with begin will catch exception
+such as:
+```ruby
+require 'timeout'</p>
+
+<p>puts "#{Time.now}: Starting"
+begin
+  Timeout.timeout(5) do</p>
+
+<pre><code>begin
+  sleep 10
+rescue Exception =&gt; e
+  puts "#{Time.now}: Caught an exception: #{e.inspect}"
+end
+sleep 10
+</code></pre>
+
+<p>  end
+rescue Timeout::Error => e
+  puts "#{Time.now}: Timeout: #{e}"
+else
+  puts "#{Time.now}: Never timed out."
+end
+<code>
+so new a thread, as ruby 1.9 thread is native
+</code>ruby
+begin
+  complete_results = Timeout.timeout(4) do</p>
+
+<pre><code>Thread.new{ results = platform.search(artist, album_name) }.value
+</code></pre>
+
+<p>  end
+rescue Timeout::Error
+  puts 'Print me something please'
+end
+```</p>
+
+<h2>implementation</h2>
+
+<p>```ruby</p>
+
+<h1>From lib/timeout.rb</h1>
+
+<p>def timeout(sec, exception=Error)
+  return yield if sec == nil or sec.zero?
+  raise ThreadError, "timeout within critical session" if Thread.critical
+  begin</p>
+
+<pre><code>x = Thread.current
+y = Thread.start {
+  sleep sec
+  x.raise exception, "execution expired" if x.alive?
+}
+yield sec
+#    return true
+</code></pre>
+
+<p>  ensure</p>
+
+<pre><code>y.kill if y and y.alive?
+</code></pre>
+
+<p>  end
+end
+```
+system timer only for 1.8<a href="http://ph7spot.com/musings/system-timer">.</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: hostname | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/hostname/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Change Computer/Host Name Mac OsX]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/15/change-computer-slash-host-name-mac-osx/"/>
+    <updated>2012-11-15T22:27:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/15/change-computer-slash-host-name-mac-osx</id>
+    <content type="html"><![CDATA[<p>One of the most common problems that we come across is when the programmer tries to
+setup the Mac OS X - name/hostname for the computer, since it takes up most space
+in the Terminal bash prompt and since the default ones are not so fancy, when
+accessed over the network.</p>
+
+<ol>
+<li><p>Click the "Apple" menu in the top-left of the screen. Click on "System Preferences."</p></li>
+<li><p>Click the "Sharing" icon. At the top of the resulting screen, you will see your current computer name. To change it, click into the field, delete the existing name and enter your desired computer name.</p></li>
+<li><p>Click on the "Edit" button underneath the computer name field to change the local hostname. The hostname can be used to access your computer over the network as an alternative to using a numeric IP address and is particularly relevant if you are using a network with a mix of Apple Macs and Microsoft Windows PCs.</p></li>
+<li><p>Close the window to save your changes.</p></li>
+</ol>
+
+
+<p><a href="http://techtips.salon.com/change-apple-mac-computer-name-537.html">Source Link</a></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

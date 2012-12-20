@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: api | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/api/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Applying Common Filtering for Rails Api Based Applications]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/26/applying-common-filtering-for-rails-api-based-applications/"/>
+    <updated>2012-11-26T22:50:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/26/applying-common-filtering-for-rails-api-based-applications</id>
+    <content type="html"><![CDATA[<p>Sometimes there are common sets of fields and id's that we would like the api
+to filter before sending the details to the client. It would be great if we can
+place them in a common place so that they can be changed anytime.</p>
+
+<p>File: lib/api_config.rb</p>
+
+<p>```ruby</p>
+
+<h1>Filters out the specified list of fields from the API calls</h1>
+
+<p>APIFILTERS = ['id','password','secret__internal_id','updated_at','created_at']
+```</p>
+
+<p>File: config/initializers/json_config.rb</p>
+
+<p>```ruby</p>
+
+<h1>Requiring the api configuration file</h1>
+
+<p>require 'api_config'</p>
+
+<p>class ActiveRecord::Base
+  def as_json_with_filter(options=Hash.new)</p>
+
+<pre><code>options[:except] = APIFILTERS
+as_json_without_filter(options)
+</code></pre>
+
+<p>  end
+  alias_method_chain :as_json, :filter
+end</p>
+
+<p>```
+the alias_method_chain does two things here:</p>
+
+<ul>
+<li><p>firstly it creates an alias method called as_json_without_filter to as_json</p></li>
+<li><p>secondly it looks for as_json_with_filter and makes that as the new as_json
+method</p></li>
+</ul>
+
+
+<p>The as_json method is one that gets called when the to_json method is called on a
+model object or a collection of model objects in rails</p>
+
+<p>example: users controller file</p>
+
+<p>```ruby</p>
+
+<p>class UsersController &lt; ApplicationController</p>
+
+<p>  respond_to :json</p>
+
+<p>  def show</p>
+
+<pre><code>@user = User.find(params[:id])
+respond_with @user
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>```</p>
+
+<p>the above would call the as_json method of the user model, we have just
+overridden the super class to filter out a few fields</p>
+
+<p>```ruby
+class User &lt; ActiveRecord::Base</p>
+
+<p>def as_json(options={})
+  super(:include => :parents)
+end</p>
+
+<p>```</p>
+
+<p>for xml, this is slightly Different</p>
+
+<p>File: config/initializers/xml_config.rb</p>
+
+<p>```ruby</p>
+
+<h1>Requiring the api configuration file</h1>
+
+<p>require 'api_config'</p>
+
+<p>class ActiveRecord::Base
+  alias_method :to_xml, :old_to_xml
+  def to_xml(options=Hash.new)</p>
+
+<pre><code>options[:except] = APIFILTERS
+old_to_xml(options)
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>```</p>
+
+<p>Any questions, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

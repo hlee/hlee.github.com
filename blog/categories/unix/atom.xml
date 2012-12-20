@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: unix | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/unix/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Working with Processes in Unix]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/24/working-with-processes-in-unix/"/>
+    <updated>2012-11-24T07:08:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/24/working-with-processes-in-unix</id>
+    <content type="html"><![CDATA[<p>There are two commands heavily used by developers for checking their pocesses
+in unix.</p>
+
+<ol>
+<li>Firstly it is the search for processes</li>
+</ol>
+
+
+<p><code>sh
+ps -ef | grep search_process
+</code></p>
+
+<p>or</p>
+
+<p><code>sh
+ps aux | grep search_process
+</code></p>
+
+<p>what's the difference, well both do the same task</p>
+
+<p><a href="http://askubuntu.com/questions/129962/ps-ef-vs-ps-aux">link</a></p>
+
+<p>Both list all processes of all users. In that aspect -e and ax are completely equivalent.
+Where they differ is output format specifier, -f is "full", while u is "user-oriented". The displayed columns are different:
+columns for ps -f
+UID PID PPID C STIME TTY TIME CMD</p>
+
+<p>columns for ps u
+USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</p>
+
+<p>The difference between ps -ef and ps aux is due to historical divergences between POSIX and BSD systems.
+At the beginning, POSIX accepted the -ef while the BSD accepted only the aux form.</p>
+
+<ol>
+<li>Secondly to kill the process that we just found</li>
+</ol>
+
+
+<p><code>sh
+kill -9 pid
+</code></p>
+
+<p>or</p>
+
+<p><code>sh
+kill -SIGKILL PID
+</code></p>
+
+<p>or if we know the process name and if the unix system supports</p>
+
+<p><code>sh
+killall nginx
+</code></p>
+
+<p>Tip: What if we need to kill all the processes that starts with 'schedule'.
+Here it is..</p>
+
+<p><code>sh
+ps aux | grep schedule | grep -v grep | awk '{print $2}' | xargs kill -9
+</code></p>
+
+<p>A quick description of the steps:</p>
+
+<ol>
+<li>"ps aux | grep schedule" searches for the processes by the name schedule and
+returns the rows</li>
+<li>"grep -v grep" excludes grep from the searched process list (rows)</li>
+<li>"awk '{print $2}'" prints the second column of all the values returned.
+Which is mostly the process Id, if not choose the corresponding column by
+its number of appearance in the rows returned</li>
+<li>"xargs kill -9" sends the kill signal to all the selected process Ids</li>
+</ol>
+
+
+<p>Please make sure that you are searching for the right processes before killing them.</p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[using screen to keep unix sessions active]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/24/using-screen-to-keep-unix-sessions-active/"/>
+    <updated>2012-11-24T05:54:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/24/using-screen-to-keep-unix-sessions-active</id>
+    <content type="html"><![CDATA[<p>In Unix, what is screen, and how do I use it?</p>
+
+<p>The screen program allows you to use multiple windows (virtual VT100 terminals) in Unix.</p>
+
+<p>Note: UITS does not support screen.</p>
+
+<h3>Features</h3>
+
+<ol>
+<li>If your local computer crashes, or you are connected via a modem and lose the connection, the processes or login sessions you establish through screen don't go away. You can resume your screen sessions with the following command:</li>
+</ol>
+
+
+<p><code>sh
+  screen -r
+</code></p>
+
+<p>In some cases you may have to manually "detach" your screen session before resuming it. For more information, see the Knowledge Base document Using screen, why can't I re-attach to my session after a lost connection?</p>
+
+<ol>
+<li><p>The screen program creates multiple processes instead of multiple Unix login sessions, which means that it is resource-efficient.</p></li>
+<li><p>You can cut and paste between different screens without using a mouse. Thus, you don't need to be on a computer with a windowing environment such as Mac OS, Mac OS X, Windows, or the X Window System.</p></li>
+<li><p>It has a block copy feature which is similar to the kill rectangle feature of Emacs.</p></li>
+<li><p>You can copy and paste more than one page at a time, which you cannot do with some clients. You can scroll up more than one page, depending on how many scrolling lines you have set with the  -h  option.</p></li>
+<li><p>Using the detach feature, you can save screen processes when logging out and resume where you left off, saving the trouble of restarting them.</p></li>
+</ol>
+
+
+<h3>Starting screen</h3>
+
+<p>To start screen, enter the following command:</p>
+
+<p><code>sh
+  screen
+</code></p>
+
+<h3>General commands</h3>
+
+<p>Note: Every screen command begins with Ctrl-a .</p>
+
+<table cellpadding="10">
+  <tr align="left" valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;c</code> </td>
+    <td align="left">Create new window (shell) </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;k</code> 
+     </td>
+    <td align="left">Kill the current window
+  </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;w</code>
+    </td>
+    <td align="left">List all windows (the current window is marked with "*")</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;0-9</code>
+    </td>
+    <td align="left">Go to a window numbered 0-9</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;n</code>
+    </td>
+    <td align="left">Go to the next window </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a</code>&nbsp;<code>Ctrl-a </code>
+    </td>
+    <td align="left">Toggle between the current and previous window
+    </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;[</code> </td>
+  <td align="left">Start copy mode
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;]</code> </td>
+  <td align="left">Paste copied text
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;?</code> </td>
+  <td align="left">Help (display a list of commands)
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a</code>&nbsp;<code>Ctrl-\</code> </td>
+  <td align="left">Quit <code>screen</code>
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;D</code> (Shift-d) </td>
+  <td align="left">Power detach and logout
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;d</code> </td>
+  <td align="left">Detach but keep shell window open</td>
+  </tr>
+</table>
+
+
+<p>Press the Spacebar or Enter to end a command.</p>
+
+<p><strong>To copy a block</strong></p>
+
+<p>To get into copy mode, press Ctrl-a [  .</p>
+
+<p>To move the cursor, press the  h ,  j ,  k , and  l  (the letter l) keys. The  0  (the number 0) or  ^  (the caret) moves to the start of the line and  $  (the dollar sign) moves to the end of the line. Ctrl-b scrolls the cursor back one page and Ctrl-f scrolls forward one page. To set the left and right margins of copy, press  c  and  C  (Shift-c). The Spacebar starts selecting the text and ends selecting the text. To abort copy mode, press Ctrl-g .</p>
+
+<p><strong>To paste a block</strong></p>
+
+<p>To paste the copied text to the current window (as many times as you want), press Ctrl-a ] .</p>
+
+<p><strong>Other commands</strong></p>
+
+<p>To run a program or execute any Unix command in a new window, at the Unix prompt, enter:</p>
+
+<p><code>sh
+  screen unixcommand
+</code></p>
+
+<p>Above, replace unixcommand with the appropriate command name.</p>
+
+<p>To automatically start several windows when you run screen, create a .screenrc file in your home directory and put screen commands in it.</p>
+
+<p>To quit screen (kill all windows in the current session), press Ctrl-a Ctrl-\ .</p>
+
+<p>The man pages for screen are quite readable and make a good tutorial. At the Unix prompt, enter:</p>
+
+<p><code>sh
+  man screen
+</code></p>
+
+<h3>[Source Link][http://kb.iu.edu/data/acuy.html]</h3>
+
+<h3>If your unix server does not support <a href="/blog/2012/11/24/using-screen-to-keep-unix-sessions-active">screen</a>. It is always a better to run some commands with <a href="/blog/2012/11/24/using-nohup-to-prevent-processes-stopping-on-disconnect">nohup</a>.</h3>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using nohup to prevent processes stopping on disconnect]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/24/using-nohup-to-prevent-processes-stopping-on-disconnect/"/>
+    <updated>2012-11-24T05:32:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/24/using-nohup-to-prevent-processes-stopping-on-disconnect</id>
+    <content type="html"><![CDATA[<p><strong>nohup</strong> is an unix command which prevents "hangups on logout" which also means that if you decide you need to logoff the from the session with the server, the  command will continue to run as the user.</p>
+
+<p>Syntax:</p>
+
+<p><code>sh
+nohup run_command &amp;
+</code></p>
+
+<p>run_command in the above Syntax is the name of the command you want to run.</p>
+
+<p>And the &amp; at the end of the line makes the process run in the background. Once the command starts you can then continue to issue other commands or logout if you choose so. After executing the above command you'll see this displayed on the command line, and you may need to press the <enter> key before being able to enter other commands.</p>
+
+<p>This means that all the output from the command will go into a file called "nohup.out" in the current working directory. You can tail the same to check the logs.</p>
+
+<p><code>sh
+tail -f nohup.out
+</code></p>
+
+<p>Also we can alternatively output the text from the command to a different file using redirection.</p>
+
+<p><code>sh
+nohup run_command &gt; run_command.log &amp;
+</code></p>
+
+<h3>If your unix server supports <a href="/blog/2012/11/24/using-screen-to-keep-unix-sessions-active">screen</a>. It is always a better option with more features.</h3>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

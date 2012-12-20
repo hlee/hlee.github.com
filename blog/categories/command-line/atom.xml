@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: command line | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/command-line/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Passing Command Line Arguments to Rake Tasks]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/pass-command-line-arguments-to-a-rake-task/"/>
+    <updated>2012-11-28T08:02:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/pass-command-line-arguments-to-a-rake-task</id>
+    <content type="html"><![CDATA[<p>Sometimes, we need to rake tasks that inserts a paticular user entered value into multiple databases.</p>
+
+<p>We'd like to be able to pass this value into the rake task from the command line, or from another rake task, how can We do this?</p>
+
+<p>```ruby
+require 'rake'</p>
+
+<p>task :my_task, :arg1, :arg2 do |t, args|
+  puts "Args were: #{args}"
+end
+```</p>
+
+<p>You can invoke it by using the following:</p>
+
+<p><code>ruby
+task :invoke_my_task do
+  Rake.application.invoke_task("my_task[1, 2]")
+end
+</code></p>
+
+<p>or if you prefer this syntax...</p>
+
+<p><code>ruby
+task :invoke_my_task_2 do
+  Rake::Task[:my_task].invoke(3, 4)
+end
+</code></p>
+
+<p>A task with prerequisites passes its arguments to it prerequisites(tasks)</p>
+
+<p><code>ruby
+task :with_prerequisite, :arg1, :arg2, :needs =&gt; :my_task
+</code></p>
+
+<p>or just a...</p>
+
+<p><code>ruby
+task :with_prerequisite, [:arg1, :arg2] =&gt; :my_task
+</code></p>
+
+<p>To specify default values, we take advantage of args being a Rake::TaskArguments object</p>
+
+<p><code>ruby
+task :with_defaults, :arg1, :arg2 do |t, args|
+  args.with_defaults(:arg1 =&gt; 1, :arg2 =&gt; 2)
+  puts "Args with defaults were: #{args}"
+end
+</code></p>
+
+<p>Here are a few usages:</p>
+
+<p>```sh</p>
+
+<blockquote><p>rake my_task[1,2]
+Args were: {:arg1=>"1", :arg2=>"2"}</p>
+
+<p>rake "my_task[1, 2]"
+Args were: {:arg1=>"1", :arg2=>"2"}</p>
+
+<p>rake invoke_my_task
+Args were: {:arg1=>"1", :arg2=>"2"}</p>
+
+<p>rake invoke_my_task_2
+Args were: {:arg1=>3, :arg2=>4}</p>
+
+<p>rake with_prerequisite[5,6]
+Args were: {:arg1=>"5", :arg2=>"6"}</p>
+
+<p>rake with_prerequisite_2[7,8]
+Args were: {:arg1=>"7", :arg2=>"8"}</p>
+
+<p>rake with_defaults
+Args with defaults were: {:arg1=>:default_1, :arg2=>:default_2}</p>
+
+<p>rake with_defaults['x','y']
+Args with defaults were: {:arg1=>"x", :arg2=>"y"}
+```</p></blockquote>
+
+<p><a href="http://rake.rubyforge.org/files/doc/rakefile_rdoc.html">For more information...</a></p>
+
+<p><a href="http://stackoverflow.com/questions/825748/how-do-i-pass-command-line-arguments-to-a-rake-task">.</a></p>
+
+<p>Any questions on this, please feel free to ask. We’re here to help…</p>
+]]></content>
+  </entry>
+  
+</feed>

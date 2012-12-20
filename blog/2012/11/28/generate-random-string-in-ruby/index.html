@@ -1,0 +1,504 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>generate random string in ruby - Ruby on Rails Blog</title>
+	<meta name="author" content="Ken Lu, Andrew Sheelan">
+
+	
+	<meta name="description" content="Sometimes we need to generate a &#8216;n&#8217; character random string. Here are a few: Only upper case alphabets [A-Z] 1
+2
+3
+4
+5
+value = &quot;& &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Ruby on Rails Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Ruby on Rails Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:hlee.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:hlee.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Generate Random String in Ruby</h2>
+	<div class="entry-content"><p>Sometimes we need to generate a &#8216;n&#8217; character random string.</p>
+
+<p>Here are a few:</p>
+
+<ul>
+<li><strong>Only upper case alphabets [A-Z]</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="mi">8</span><span class="o">.</span><span class="n">times</span><span class="p">{</span><span class="n">value</span>  <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">65</span> <span class="o">+</span> <span class="nb">rand</span><span class="p">(</span><span class="mi">25</span><span class="p">))</span><span class="o">.</span><span class="n">chr</span><span class="p">}</span> <span class="o">&gt;&gt;</span><span class="p">}</span>
+</span><span class='line'><span class="c1">#or</span>
+</span><span class='line'><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span><span class="mi">65</span><span class="o">.</span><span class="n">+</span><span class="p">(</span><span class="nb">rand</span><span class="p">(</span><span class="mi">26</span><span class="p">))</span><span class="o">.</span><span class="n">chr</span><span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span><span class="o">[</span><span class="nb">rand</span><span class="p">(</span><span class="mi">26</span><span class="p">)</span><span class="o">]</span>  <span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong>Lower case and upper case [a-zA-Z]</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="mi">8</span><span class="o">.</span><span class="n">times</span><span class="p">{</span><span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="p">((</span><span class="nb">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="o">?</span><span class="mi">65</span><span class="p">:</span><span class="mi">97</span><span class="p">)</span> <span class="o">+</span> <span class="nb">rand</span><span class="p">(</span><span class="mi">25</span><span class="p">))</span><span class="o">.</span><span class="n">chr</span><span class="p">}</span> <span class="o">&gt;&gt;</span><span class="p">}</span>
+</span><span class='line'><span class="c1">#or</span>
+</span><span class='line'><span class="n">o</span> <span class="o">=</span>  <span class="o">[</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">),(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">].</span><span class="n">map</span><span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span><span class="o">.</span><span class="n">to_a</span><span class="p">}</span><span class="o">.</span><span class="n">flatten</span>
+</span><span class='line'><span class="n">string</span>  <span class="o">=</span>  <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="n">o</span><span class="o">[</span><span class="nb">rand</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">length</span><span class="p">)</span><span class="o">]</span>  <span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong>Using SecureRandom provided by ActiveSupport</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;active_support/secure_random&#39;</span>
+</span><span class='line'><span class="n">random_string</span> <span class="o">=</span> <span class="no">ActiveSupport</span><span class="o">::</span><span class="no">SecureRandom</span><span class="o">.</span><span class="n">hex</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># outputs: 5b5cd0da3121fc53b4bc84d0c8af2e81</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>SecureRandom also has methods for:</li>
+</ul>
+
+
+<p>base64</p>
+
+<ol>
+<li>hex</li>
+<li>random_bytes</li>
+<li>random_number</li>
+</ol>
+
+
+<p><a href="http://api.rubyonrails.org/v3.0.9/classes/ActiveSupport/SecureRandom.html">see:</a></p>
+
+<ul>
+<li><strong>It is also important to avoid Ambiguity</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Generates a random string from a set of easily readable characters</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">generate_activation_code</span><span class="p">(</span><span class="n">size</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">charset</span> <span class="o">=</span> <span class="sx">%w{ 2 3 4 6 7 9 A C D E F G H J K M N P Q R T V W X Y Z}</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="n">charset</span><span class="o">.</span><span class="n">to_a</span><span class="o">[</span><span class="nb">rand</span><span class="p">(</span><span class="n">charset</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">]</span> <span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong>Random URL Friendly Strings</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">rand</span><span class="p">(</span><span class="mi">36</span><span class="o">**</span><span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong>One more example with SecureRandom</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;securerandom&#39;</span>
+</span><span class='line'><span class="n">s</span> <span class="o">=</span> <span class="no">SecureRandom</span><span class="o">.</span><span class="n">urlsafe_base64</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong>Creating a Random string with arguments</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">random_string</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">chars</span> <span class="o">=</span> <span class="s1">&#39;abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789&#39;</span>
+</span><span class='line'>  <span class="n">password</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'>  <span class="n">length</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="n">password</span> <span class="o">&lt;&lt;</span> <span class="n">chars</span><span class="o">[</span><span class="nb">rand</span><span class="p">(</span><span class="n">chars</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">]</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">password</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong>This example works Only in ruby 1.9</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">[*</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">].</span><span class="n">sample</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'><span class="c1">#Generate a random 8 letter string (e.g. NVAYXHGR)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="o">[*</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">),</span><span class="o">*</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;9&#39;</span><span class="p">)</span><span class="o">]-</span><span class="sx">%w(0 1 I O)</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'><span class="c1">#Generate a random 8 character string (e.g. 3PH4SWF2), excludes 0/1/I/O. Ruby 1.9</span>
+</span><span class='line'><span class="no">ALPHABET</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'><span class="mi">10</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="no">ALPHABET</span><span class="o">.</span><span class="n">sample</span> <span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'><span class="mi">10</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">inject</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">){</span><span class="o">|</span><span class="n">s</span><span class="o">|</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="no">ALPHABET</span><span class="o">.</span><span class="n">sample</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong>Here&#8217;s one using digest sha1</strong></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;sha1&#39;</span>
+</span><span class='line'><span class="nb">srand</span>
+</span><span class='line'><span class="n">seed</span> <span class="o">=</span> <span class="s2">&quot;--</span><span class="si">#{</span><span class="nb">rand</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span><span class="si">}</span><span class="s2">--</span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="si">}</span><span class="s2">--&quot;</span>
+</span><span class='line'><span class="no">Digest</span><span class="o">::</span><span class="no">SHA1</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">8</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><p><strong>Here are more examples to help</strong></p></li>
+<li><p>Example 1</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">rand</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">256</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">7</span><span class="o">]</span>
+</span><span class='line'><span class="c1">#Add ljust if you are really paranoid about the correct string length:</span>
+</span><span class='line'><span class="nb">rand</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">256</span><span class="p">)</span><span class="o">.</span><span class="n">to_s</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">7</span><span class="o">]</span>
+</span><span class='line'><span class="n">characters</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'><span class="c1"># Prior to 1.9, use .choice, not .sample</span>
+</span><span class='line'><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span><span class="n">characters</span><span class="o">.</span><span class="n">sample</span><span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">n</span><span class="o">|</span> <span class="n">value</span>  <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">65</span> <span class="o">+</span> <span class="nb">rand</span><span class="p">(</span><span class="mi">25</span><span class="p">))</span><span class="o">.</span><span class="n">chr</span> <span class="p">}</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 2</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">generate_random_string</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>  <span class="n">chars</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="o">.</span><span class="n">.</span><span class="s2">&quot;Z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'>  <span class="n">length</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">string</span> <span class="o">&lt;&lt;</span> <span class="n">chars</span><span class="o">[</span><span class="nb">rand</span><span class="p">(</span><span class="n">chars</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="n">string</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 3</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">chars</span> <span class="o">=</span> <span class="o">[*</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">),</span><span class="o">*</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;9&#39;</span><span class="p">)</span><span class="o">].</span><span class="n">flatten</span>
+</span><span class='line'><span class="c1">#Single expression, can be passed as an argument, allows duplicate characters:</span>
+</span><span class='line'><span class="nb">Array</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">len</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">chars</span><span class="o">.</span><span class="n">sample</span><span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 4</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">token</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">chars</span> <span class="o">=</span> <span class="o">[*</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">),</span> <span class="o">*</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">),</span> <span class="o">*</span><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">9</span><span class="p">)</span><span class="o">]</span>
+</span><span class='line'>  <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.length</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span><span class="n">chars</span><span class="o">.</span><span class="n">sample</span><span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 5</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">tap</span> <span class="p">{</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="mi">4</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="n">v</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span><span class="o">.</span><span class="n">sample</span><span class="p">}</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 6</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">String</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">random</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_by</span> <span class="p">{</span><span class="nb">rand</span><span class="p">}</span><span class="o">[</span><span class="mi">0</span><span class="p">,</span><span class="n">length</span><span class="o">].</span><span class="n">join</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 7</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="o">[</span><span class="p">(</span><span class="mi">48</span><span class="o">.</span><span class="n">.</span><span class="mi">57</span><span class="p">),(</span><span class="mi">65</span><span class="o">.</span><span class="n">.</span><span class="mi">90</span><span class="p">),(</span><span class="mi">97</span><span class="o">.</span><span class="n">.</span><span class="mi">122</span><span class="p">)</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="n">x</span><span class="o">.</span><span class="n">chr</span><span class="p">}</span><span class="s2">&quot;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 8</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">secure_random_string</span><span class="p">(</span><span class="n">length</span> <span class="o">=</span> <span class="mi">32</span><span class="p">,</span> <span class="n">non_ambiguous</span> <span class="o">=</span> <span class="kp">false</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">characters</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;Z&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="o">.</span><span class="n">.</span><span class="s1">&#39;9&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_a</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="sx">%w{I O l 0 1}</span><span class="o">.</span><span class="n">each</span><span class="p">{</span> <span class="o">|</span><span class="n">ambiguous_character</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">characters</span><span class="o">.</span><span class="n">delete</span> <span class="n">ambiguous_character</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">if</span> <span class="n">non_ambiguous</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="n">length</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">characters</span><span class="o">[</span><span class="no">ActiveSupport</span><span class="o">::</span><span class="no">SecureRandom</span><span class="o">.</span><span class="n">random_number</span><span class="p">(</span><span class="n">characters</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">]</span>
+</span><span class='line'>  <span class="p">}</span><span class="o">.</span><span class="n">join</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 9</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">SecureRandom</span><span class="o">.</span><span class="n">base64</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s1">&#39;+/=lIO0&#39;</span><span class="p">,</span> <span class="s1">&#39;pqrsxyz&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># ruby 1.8 and unix</span>
+</span><span class='line'><span class="n">random_string</span> <span class="o">=</span> <span class="sb">`openssl rand -base64 24`</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://stackoverflow.com/questions/88311/how-best-to-generate-a-random-string-in-ruby">.</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-28T22:39:00-05:00" pubdate data-updated="true">Nov 28<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/random/'>random</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/string/'>string</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/28/generate-random-string-in-ruby/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    Ken Lu, Andrew Sheelan
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'guest';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hlee.github.com/blog/2012/11/28/generate-random-string-in-ruby/';
+        var disqus_url = 'http://hlee.github.com/blog/2012/11/28/generate-random-string-in-ruby/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

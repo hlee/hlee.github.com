@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: capybara | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/capybara/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[capybara webkit or selenium or watir to simulate browser behavior]]></title>
+    <link href="http://hlee.github.com/blog/2012/12/06/capybara-webkit-or-selenium-or-watir-to-simulate-browser-behavior/"/>
+    <updated>2012-12-06T15:29:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/12/06/capybara-webkit-or-selenium-or-watir-to-simulate-browser-behavior</id>
+    <content type="html"><![CDATA[<p>Sometimes we want to simulate browser behavior. The situation can be test or automation script.</p>
+
+<h2>install capybara-webkit</h2>
+
+<p>```ruby</p>
+
+<h1>capybara-webkit need qt</h1>
+
+<h1>ubuntu</h1>
+
+<p>sudo aptitude install libqt4-dev
+```</p>
+
+<h2>using capybara dsl</h2>
+
+<p>```ruby
+require 'capybara'
+require 'capybara/dsl'</p>
+
+<p>Capybara.default_driver = :webkit</p>
+
+<p>module MyModule
+  include Capybara::DSL</p>
+
+<p>  def login!</p>
+
+<pre><code>within("//form[@id='session']") do
+  fill_in 'Login', :with =&gt; 'user@example.com'
+  fill_in 'Password', :with =&gt; 'password'
+  fill_in('First Name', :with =&gt; 'John')
+  fill_in('Password', :with =&gt; 'Seekrit')
+  fill_in('Description', :with =&gt; 'Really Long Text...')
+  choose('A Radio Button')
+  check('A Checkbox')
+  uncheck('A Checkbox')
+  attach_file('Image', '/path/to/image.jpg')
+  select('Option', :from =&gt; 'Select Box')
+  end
+  click_link 'Sign in'
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h2>Debugging</h2>
+
+<p>It can be useful to take a snapshot of the page as it currently is and take a
+look at it:</p>
+
+<p><code>ruby
+save_and_open_page
+</code></p>
+
+<p>You can also retrieve the current state of the DOM as a string using
+<tt><a href="http://rubydoc.info/github/jnicklas/capybara/master/Capybara/Session#html-instance_method">page.html</a></tt>.</p>
+
+<p><code>ruby
+print page.html
+</code></p>
+
+<p>This is mostly useful for debugging. You should avoid testing against the
+contents of <code>page.html</code> and use the more expressive finder methods instead.</p>
+
+<p>Finally, in drivers that support it, you can save a screenshot:</p>
+
+<p><code>ruby
+page.save_screenshot('screenshot.png')
+</code></p>
+
+<h2>Calling remote servers</h2>
+
+<p>Normally Capybara expects to be testing an in-process Rack application, but you
+can also use it to talk to a web server running anywhere on the internets, by
+setting app_host:</p>
+
+<p><code>ruby
+Capybara.current_driver = :selenium
+Capybara.app_host = 'http://www.google.com'
+...
+visit('/')
+</code></p>
+
+<p><strong>Note</strong>: the default driver (<code>:rack_test</code>) does not support running
+against a remote server. With drivers that support it, you can also visit any
+URL directly:</p>
+
+<p><code>ruby
+visit('http://www.google.com')
+</code></p>
+
+<p>By default Capybara will try to boot a rack application automatically. You
+might want to switch off Capybara's rack server if you are running against a
+remote application:</p>
+
+<p><code>ruby
+Capybara.run_server = false
+</code></p>
+
+<h2>Using the sessions manually</h2>
+
+<p>For ultimate control, you can instantiate and use a
+<a href="http://rubydoc.info/github/jnicklas/capybara/master/Capybara/Session">Session</a>
+manually.</p>
+
+<p>```ruby
+require 'capybara'</p>
+
+<p>session = Capybara::Session.new(:webkit, my_rack_app)
+session.within("//form[@id='session']") do
+  session.fill_in 'Login', :with => 'user@example.com'
+  session.fill_in 'Password', :with => 'password'
+end
+session.click_link 'Sign in'
+```</p>
+
+<h2>XPath, CSS and selectors</h2>
+
+<p>Capybara does not try to guess what kind of selector you are going to give it,
+and will always use CSS by default.  If you want to use XPath, you'll need to
+do:</p>
+
+<p><code>ruby
+within(:xpath, '//ul/li') { ... }
+find(:xpath, '//ul/li').text
+find(:xpath, '//li[contains(.//a[@href = "#"]/text(), "foo")]').value
+</code></p>
+
+<p>Alternatively you can set the default selector to XPath:</p>
+
+<p><code>ruby
+Capybara.default_selector = :xpath
+find('//ul/li').text
+</code></p>
+
+<p>Capybara allows you to add custom selectors, which can be very useful if you
+find yourself using the same kinds of selectors very often:</p>
+
+<p>```ruby
+Capybara.add_selector(:id) do
+  xpath { |id| XPath.descendant[XPath.attr(:id) == id.to_s] }
+end</p>
+
+<p>Capybara.add_selector(:row) do
+  xpath { |num| ".//tbody/tr[#{num}]" }
+end</p>
+
+<p>Capybara.add_selector(:flash_type) do
+  css { |type| "#flash.#{type}" }
+end
+```</p>
+
+<p>The block given to xpath must always return an XPath expression as a String, or
+an XPath expression generated through the XPath gem. You can now use these
+selectors like this:</p>
+
+<p><code>ruby
+find(:id, 'post_123')
+find(:row, 3)
+find(:flash_type, :notice)
+</code></p>
+
+<p>You can specify an optional match option which will automatically use the
+selector if it matches the argument:</p>
+
+<p><code>ruby
+Capybara.add_selector(:id) do
+  xpath { |id| XPath.descendant[XPath.attr(:id) == id.to_s] }
+  match { |value| value.is_a?(Symbol) }
+end
+</code></p>
+
+<p>Now use it like this:</p>
+
+<p><code>ruby
+find(:post_123)
+</code></p>
+
+<p>This :id selector is already built into Capybara by default, so you don't
+need to add it yourself<a href="https://github.com/jnicklas/capybara">.</a></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,340 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>create ruby dynamic class - Ruby on Rails Blog</title>
+	<meta name="author" content="Ken Lu, Andrew Sheelan">
+
+	
+	<meta name="description" content="1
+2
+3
+4
+5
+dynamic_name = &quot;TestEval2&quot; Object.const_set(dynamic_name, Class.new)
+dummy2 = eval(&quot;#{dynamic_name}&quot;)
+puts &quot;dummy2 &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Ruby on Rails Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Ruby on Rails Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:hlee.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:hlee.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Create Ruby Dynamic Class</h2>
+	<div class="entry-content"><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dynamic_name</span> <span class="o">=</span> <span class="s2">&quot;TestEval2&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">const_set</span><span class="p">(</span><span class="n">dynamic_name</span><span class="p">,</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'><span class="n">dummy2</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">dynamic_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;dummy2: </span><span class="si">#{</span><span class="n">dummy2</span><span class="si">}</span><span class="s2">&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">dynamic_name</span> <span class="o">=</span> <span class="s2">&quot;ClassName&quot;</span>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">const_set</span><span class="p">(</span><span class="n">dynamic_name</span><span class="p">,</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="k">def</span> <span class="nf">method1</span><span class="p">()</span> <span class="mi">42</span> <span class="k">end</span> <span class="p">})</span>
+</span><span class='line'><span class="no">ClassName</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">method1</span> <span class="c1">#=&gt; 42</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">class_name</span> <span class="o">=</span> <span class="s1">&#39;foo&#39;</span><span class="o">.</span><span class="n">capitalize</span>
+</span><span class='line'><span class="n">klass</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">const_set</span><span class="p">(</span><span class="n">class_name</span><span class="p">,</span><span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">names</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;instance1&#39;</span><span class="p">,</span> <span class="s1">&#39;instance2&#39;</span><span class="o">]</span> <span class="c1"># Array of instance vars</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">klass</span><span class="o">.</span><span class="n">class_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="o">*</span><span class="n">names</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">define_method</span><span class="p">(</span><span class="ss">:initialize</span><span class="p">)</span> <span class="k">do</span> <span class="o">|*</span><span class="n">values</span><span class="o">|</span>
+</span><span class='line'>    <span class="n">names</span><span class="o">.</span><span class="n">each_with_index</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span><span class="n">i</span><span class="o">|</span>
+</span><span class='line'>      <span class="nb">instance_variable_set</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="o">+</span><span class="nb">name</span><span class="p">,</span> <span class="n">values</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="c1"># more...</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>class_eval and const_set are used.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">a_new_class</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Object</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:x</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span class='line'>    <span class="nb">print</span> <span class="c1">#{self.class} initialized with #{x}&quot;</span>
+</span><span class='line'>    <span class="vi">@x</span> <span class="o">=</span> <span class="n">x</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">SomeModule</span><span class="o">.</span><span class="n">const_set</span><span class="p">(</span><span class="s2">&quot;ClassName&quot;</span><span class="p">,</span> <span class="n">a_new_class</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">c</span> <span class="o">=</span> <span class="no">ClassName</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>without class_eval and const_set
+You don&#8217;t really need to use const_set. The return value of Class.new can be assigned to a constant and the block of Class.new is class_eval.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ass</span> <span class="no">Ancestor</span><span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="no">SomeClass</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">Ancestor</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+</span><span class='line'>     <span class="nb">print</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="si">}</span><span class="s2"> initialized with </span><span class="si">#{</span><span class="n">var</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="o">=&gt;</span> <span class="no">SomeClass</span>
+</span><span class='line'><span class="no">SomeClass</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="c1"># SomeClass initialized with foo=&gt; #&lt;SomeClass:0x668b68&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The following code uses a class factory to create a new class along with getter and setters for the fields passed into it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">ClassFactory</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">create_class</span><span class="p">(</span><span class="n">new_class</span><span class="p">,</span> <span class="o">*</span><span class="n">fields</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">c</span> <span class="o">=</span> <span class="no">Class</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">fields</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">field</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">define_method</span> <span class="n">field</span><span class="o">.</span><span class="n">intern</span> <span class="k">do</span>
+</span><span class='line'>          <span class="nb">instance_variable_get</span><span class="p">(</span><span class="s2">&quot;@</span><span class="si">#{</span><span class="n">field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>        <span class="n">define_method</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">field</span><span class="si">}</span><span class="s2">=&quot;</span><span class="o">.</span><span class="n">intern</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span>
+</span><span class='line'>          <span class="nb">instance_variable_set</span><span class="p">(</span><span class="s2">&quot;@</span><span class="si">#{</span><span class="n">field</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">end</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="no">Kernel</span><span class="o">.</span><span class="n">const_set</span> <span class="n">new_class</span><span class="p">,</span> <span class="n">c</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">ClassFactory</span><span class="o">.</span><span class="n">create_class</span> <span class="s2">&quot;Car&quot;</span><span class="p">,</span> <span class="s2">&quot;make&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">new_class</span> <span class="o">=</span> <span class="no">Car</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">new_class</span><span class="o">.</span><span class="n">make</span> <span class="o">=</span> <span class="s2">&quot;Nissan&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">new_class</span><span class="o">.</span><span class="n">make</span> <span class="c1"># =&gt; &quot;Nissan&quot;</span>
+</span><span class='line'><span class="n">new_class</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="s2">&quot;Maxima&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">new_class</span><span class="o">.</span><span class="n">model</span> <span class="c1"># =&gt; &quot;Maxima&quot;</span>
+</span><span class='line'><span class="n">new_class</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="s2">&quot;2001&quot;</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">new_class</span><span class="o">.</span><span class="n">year</span> <span class="c1"># =&gt; &quot;2001&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In Ruby, classes are simply objects like any other, which are then assigned to a constant.  Hence, to create a new class dynamically we instantiate the class Class with Class.new, and then assign it to a constant via const_set (we invoke it on Kernel so that it is a top-level constant like any other class).  We then add the code that makes up the class in a do-end block.</p>
+
+<p>In that do-end block, for each field we invoke define_method twice, first for the getter method and then the setter method with get_instance_variable and set_instance_variable, respectively.  For each field, we create the instance variables (e.g., for make, we use @make).  Note how we make use of passing the argument in for the setter.</p>
+
+<p>Additionally, if I wanted to make the class a sub-class, I could have used Class.new(parent_class)</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T18:24:00-05:00" pubdate data-updated="true">Feb 2<span>nd</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/class/'>class</a>, <a class='category' href='/blog/categories/dynamic/'>dynamic</a>, <a class='category' href='/blog/categories/metaprogramming/'>metaprogramming</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2011/02/02/create-ruby-dynamic-class/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    Ken Lu, Andrew Sheelan
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'guest';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hlee.github.com/blog/2011/02/02/create-ruby-dynamic-class/';
+        var disqus_url = 'http://hlee.github.com/blog/2011/02/02/create-ruby-dynamic-class/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>using screen to keep unix sessions active - Ruby on Rails Blog</title>
+	<meta name="author" content="Ken Lu, Andrew Sheelan">
+
+	
+	<meta name="description" content="In Unix, what is screen, and how do I use it? The screen program allows you to use multiple windows (virtual VT100 terminals) in Unix. Note: UITS &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Ruby on Rails Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Ruby on Rails Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:hlee.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:hlee.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Using Screen to Keep Unix Sessions Active</h2>
+	<div class="entry-content"><p>In Unix, what is screen, and how do I use it?</p>
+
+<p>The screen program allows you to use multiple windows (virtual VT100 terminals) in Unix.</p>
+
+<p>Note: UITS does not support screen.</p>
+
+<h3>Features</h3>
+
+<ol>
+<li>If your local computer crashes, or you are connected via a modem and lose the connection, the processes or login sessions you establish through screen don&#8217;t go away. You can resume your screen sessions with the following command:</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  screen -r
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In some cases you may have to manually &#8220;detach&#8221; your screen session before resuming it. For more information, see the Knowledge Base document Using screen, why can&#8217;t I re-attach to my session after a lost connection?</p>
+
+<ol>
+<li><p>The screen program creates multiple processes instead of multiple Unix login sessions, which means that it is resource-efficient.</p></li>
+<li><p>You can cut and paste between different screens without using a mouse. Thus, you don&#8217;t need to be on a computer with a windowing environment such as Mac OS, Mac OS X, Windows, or the X Window System.</p></li>
+<li><p>It has a block copy feature which is similar to the kill rectangle feature of Emacs.</p></li>
+<li><p>You can copy and paste more than one page at a time, which you cannot do with some clients. You can scroll up more than one page, depending on how many scrolling lines you have set with the  -h  option.</p></li>
+<li><p>Using the detach feature, you can save screen processes when logging out and resume where you left off, saving the trouble of restarting them.</p></li>
+</ol>
+
+
+<h3>Starting screen</h3>
+
+<p>To start screen, enter the following command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  screen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>General commands</h3>
+
+<p>Note: Every screen command begins with Ctrl-a .</p>
+
+<table cellpadding="10">
+  <tr align="left" valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;c</code> </td>
+    <td align="left">Create new window (shell) </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;k</code> 
+     </td>
+    <td align="left">Kill the current window
+  </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;w</code>
+    </td>
+    <td align="left">List all windows (the current window is marked with &#8220;*&#8221;)</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;0-9</code>
+    </td>
+    <td align="left">Go to a window numbered 0-9</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a&nbsp;n</code>
+    </td>
+    <td align="left">Go to the next window </td>
+  </tr>
+  <tr valign="top">
+    <td align="left">
+      <code>Ctrl-a</code>&nbsp;<code>Ctrl-a </code>
+    </td>
+    <td align="left">Toggle between the current and previous window
+    </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;[</code> </td>
+  <td align="left">Start copy mode
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;]</code> </td>
+  <td align="left">Paste copied text
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;?</code> </td>
+  <td align="left">Help (display a list of commands)
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a</code>&nbsp;<code>Ctrl-\</code> </td>
+  <td align="left">Quit <code>screen</code>
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;D</code> (Shift-d) </td>
+  <td align="left">Power detach and logout
+  </td>
+  </tr>
+  <tr valign="top">
+  <td align="left">
+  <code>Ctrl-a&nbsp;d</code> </td>
+  <td align="left">Detach but keep shell window open</td>
+  </tr>
+</table>
+
+
+<p>Press the Spacebar or Enter to end a command.</p>
+
+<p><strong>To copy a block</strong></p>
+
+<p>To get into copy mode, press Ctrl-a [  .</p>
+
+<p>To move the cursor, press the  h ,  j ,  k , and  l  (the letter l) keys. The  0  (the number 0) or  ^  (the caret) moves to the start of the line and  $  (the dollar sign) moves to the end of the line. Ctrl-b scrolls the cursor back one page and Ctrl-f scrolls forward one page. To set the left and right margins of copy, press  c  and  C  (Shift-c). The Spacebar starts selecting the text and ends selecting the text. To abort copy mode, press Ctrl-g .</p>
+
+<p><strong>To paste a block</strong></p>
+
+<p>To paste the copied text to the current window (as many times as you want), press Ctrl-a ] .</p>
+
+<p><strong>Other commands</strong></p>
+
+<p>To run a program or execute any Unix command in a new window, at the Unix prompt, enter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  screen unixcommand
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Above, replace unixcommand with the appropriate command name.</p>
+
+<p>To automatically start several windows when you run screen, create a .screenrc file in your home directory and put screen commands in it.</p>
+
+<p>To quit screen (kill all windows in the current session), press Ctrl-a Ctrl-\ .</p>
+
+<p>The man pages for screen are quite readable and make a good tutorial. At the Unix prompt, enter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>  man screen
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>[Source Link][http://kb.iu.edu/data/acuy.html]</h3>
+
+<h3>If your unix server does not support <a href="/blog/2012/11/24/using-screen-to-keep-unix-sessions-active">screen</a>. It is always a better to run some commands with <a href="/blog/2012/11/24/using-nohup-to-prevent-processes-stopping-on-disconnect">nohup</a>.</h3>
+
+<p>Any questions on this, please feel free to ask. We&#8217;re here to help&#8230;</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-24T05:54:00-05:00" pubdate data-updated="true">Nov 24<span>th</span>, 2012</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/nohup/'>nohup</a>, <a class='category' href='/blog/categories/screen/'>screen</a>, <a class='category' href='/blog/categories/unix/'>unix</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2012/11/24/using-screen-to-keep-unix-sessions-active/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    Ken Lu, Andrew Sheelan
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'guest';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hlee.github.com/blog/2012/11/24/using-screen-to-keep-unix-sessions-active/';
+        var disqus_url = 'http://hlee.github.com/blog/2012/11/24/using-screen-to-keep-unix-sessions-active/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

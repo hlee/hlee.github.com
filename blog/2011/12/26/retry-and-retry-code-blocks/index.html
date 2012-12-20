@@ -1,0 +1,363 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>retry and retry code blocks - Ruby on Rails Blog</title>
+	<meta name="author" content="Ken Lu, Andrew Sheelan">
+
+	
+	<meta name="description" content="simple way to rescue and retry several 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+tries = 0
+begin # some routine
+rescue tries += 1 retry if tries &lt &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Ruby on Rails Blog" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Ruby on Rails Blog</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/">Blog</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:hlee.github.com">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+	<form class="search" action="http://google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:hlee.github.com">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Retry and Retry Code Blocks</h2>
+	<div class="entry-content"><h2>simple way to rescue and retry several</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span class='line'><span class="k">begin</span>
+</span><span class='line'>  <span class="c1"># some routine</span>
+</span><span class='line'><span class="k">rescue</span>
+</span><span class='line'>  <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="k">retry</span> <span class="k">if</span> <span class="n">tries</span> <span class="o">&lt;=</span> <span class="mi">3</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;no dice!&quot;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="c1">#or</span>
+</span><span class='line'><span class="mi">3</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+</span><span class='line'>  <span class="k">begin</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">rescue</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">break</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>with_rescue</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Integer</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">times_try</span>
+</span><span class='line'>    <span class="n">n</span> <span class="o">=</span> <span class="nb">self</span>
+</span><span class='line'>    <span class="k">begin</span>
+</span><span class='line'>      <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+</span><span class='line'>      <span class="k">yield</span>
+</span><span class='line'>    <span class="k">rescue</span>
+</span><span class='line'>      <span class="k">raise</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span>
+</span><span class='line'>      <span class="k">retry</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">begin</span>
+</span><span class='line'>  <span class="mi">3</span><span class="o">.</span><span class="n">times_try</span> <span class="k">do</span>
+</span><span class='line'>    <span class="c1">#some routine</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">rescue</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s1">&#39;no dice!&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>if you don&#8217;t want to define</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">begin</span>
+</span><span class='line'>  <span class="c1">#your code</span>
+</span><span class='line'><span class="k">rescue</span>
+</span><span class='line'>  <span class="k">retry</span> <span class="k">if</span> <span class="n">_r</span> <span class="o">=</span> <span class="p">(</span><span class="n">_r</span> <span class="o">||</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">_r</span> <span class="o">&lt;</span> <span class="mi">4</span>
+</span><span class='line'>  <span class="k">raise</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">with_rescue</span><span class="p">(</span><span class="no">ProtocolError</span><span class="p">,</span> <span class="ss">:limit</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">try</span><span class="o">|</span>
+</span><span class='line'>  <span class="k">if</span> <span class="n">try</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;HTTP/1.1&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">else</span>
+</span><span class='line'>    <span class="nb">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;HTTP/1.0&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Retry Block Code</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># Options:</span>
+</span><span class='line'><span class="c1"># * :tries - Number of retries to perform. Defaults to 1.</span>
+</span><span class='line'><span class="c1"># * :on - The Exception on which a retry will be performed. Defaults to Exception, which retries on any Exception.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Example</span>
+</span><span class='line'><span class="c1"># =======</span>
+</span><span class='line'><span class="c1">#   retryable(:tries =&gt; 1, :on =&gt; OpenURI::HTTPError) do</span>
+</span><span class='line'><span class="c1">#     # your code here</span>
+</span><span class='line'><span class="c1">#   end</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">retryable</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{},</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">opts</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:tries</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="ss">:on</span> <span class="o">=&gt;</span> <span class="no">Exception</span> <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">retry_exception</span><span class="p">,</span> <span class="n">retries</span> <span class="o">=</span> <span class="n">opts</span><span class="o">[</span><span class="ss">:on</span><span class="o">]</span><span class="p">,</span> <span class="n">opts</span><span class="o">[</span><span class="ss">:tries</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">begin</span>
+</span><span class='line'>    <span class="k">return</span> <span class="k">yield</span>
+</span><span class='line'>  <span class="k">rescue</span> <span class="n">retry_exception</span>
+</span><span class='line'>    <span class="k">retry</span> <span class="k">if</span> <span class="p">(</span><span class="n">retries</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">yield</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>us it as</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">retryable</span><span class="p">(</span><span class="ss">:tries</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="ss">:on</span> <span class="o">=&gt;</span> <span class="no">OpenURI</span><span class="o">::</span><span class="no">HTTPError</span><span class="p">)</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;http://example.com/flaky_api&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="c1"># Code that mashes up stuff for your &quot;social networking&quot; site.</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here are the <tt><a href="http://pastie.caboo.se/138570">Kernel#retryable specs (pastie)</a></tt><a href="http://blog.codefront.net/2008/01/14/retrying-code-blocks-in-ruby-on-exceptions-whatever/">.</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-26T06:20:00-05:00" pubdate data-updated="true">Dec 26<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/block/'>block</a>, <a class='category' href='/blog/categories/rescue/'>rescue</a>, <a class='category' href='/blog/categories/retry/'>retry</a>
+
+
+</div>
+	
+		<span class="comments"><a href="/blog/2011/12/26/retry-and-retry-code-blocks/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2012
+
+    Ken Lu, Andrew Sheelan
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'guest';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://hlee.github.com/blog/2011/12/26/retry-and-retry-code-blocks/';
+        var disqus_url = 'http://hlee.github.com/blog/2011/12/26/retry-and-retry-code-blocks/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

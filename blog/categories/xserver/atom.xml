@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: xserver | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/xserver/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[webkit and rspec without x server]]></title>
+    <link href="http://hlee.github.com/blog/2011/11/06/webkit-and-rspec-without-x-server/"/>
+    <updated>2011-11-06T07:05:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2011/11/06/webkit-and-rspec-without-x-server</id>
+    <content type="html"><![CDATA[<h2>capybara-webkit</h2>
+
+<p>problems running capybara-webkit with the Headless gem, Xvfb and our ci server. We use this setup for automatic integration testing and javascript testing of our Ruby on Rails 3.2 app. During the tests it complains that</p>
+
+<blockquote><p>webkit_server: cannot connect to X server
+need to rspec to config as:</p></blockquote>
+
+<p>```ruby
+require File.expand_path("../../config/environment", <strong>FILE</strong>)
+require 'rspec/rails'
+require 'rspec/autorun'
+require 'capybara/rspec'
+require 'capybara/webkit'
+require 'headless'</p>
+
+<p>Capybara.register_driver :webkit do |app|
+  Capybara::Driver::Webkit.new(app, :ignore_ssl_errors => true)
+end</p>
+
+<p>Capybara.javascript_driver = :webkit</p>
+
+<h1>don't run on the local machine (since we don't have xvfb running locally)</h1>
+
+<p>if Rails.env.production?</p>
+
+<pre><code>headless = Headless.new
+headless.start
+</code></pre>
+
+<p>end
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: dynamic | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/dynamic/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[create ruby dynamic class]]></title>
+    <link href="http://hlee.github.com/blog/2011/02/02/create-ruby-dynamic-class/"/>
+    <updated>2011-02-02T18:24:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2011/02/02/create-ruby-dynamic-class</id>
+    <content type="html"><![CDATA[<p>```ruby
+dynamic_name = "TestEval2"</p>
+
+<p>Object.const_set(dynamic_name, Class.new)
+dummy2 = eval("#{dynamic_name}")
+puts "dummy2: #{dummy2}"
+```</p>
+
+<p><code>ruby
+dynamic_name = "ClassName"
+Object.const_set(dynamic_name, Class.new { def method1() 42 end })
+ClassName.new.method1 #=&gt; 42
+</code></p>
+
+<p>```ruby
+class_name = 'foo'.capitalize
+klass = Object.const_set(class_name,Class.new)</p>
+
+<p>names = ['instance1', 'instance2'] # Array of instance vars</p>
+
+<p>klass.class_eval do
+  attr_accessor *names</p>
+
+<p>  define_method(:initialize) do |*values|</p>
+
+<pre><code>names.each_with_index do |name,i|
+  instance_variable_set("@"+name, values[i])
+end
+</code></pre>
+
+<p>  end
+  # more...
+end
+```</p>
+
+<p>class_eval and const_set are used.</p>
+
+<p>```ruby
+a_new_class = Class.new(Object) do
+  attr_accessor :x</p>
+
+<p>  def initialize(x)</p>
+
+<pre><code>print #{self.class} initialized with #{x}"
+@x = x
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>SomeModule.const_set("ClassName", a_new_class)</p>
+
+<p>c = ClassName.new(10)
+```</p>
+
+<p>without class_eval and const_set
+You don't really need to use const_set. The return value of Class.new can be assigned to a constant and the block of Class.new is class_eval.
+```ruby
+ass Ancestor; end
+SomeClass = Class.new(Ancestor) do
+  def initialize(var)</p>
+
+<pre><code> print "#{self.class} initialized with #{var}"
+</code></pre>
+
+<p>  end
+end
+=> SomeClass
+SomeClass.new("foo")</p>
+
+<h1>SomeClass initialized with foo=> #&lt;SomeClass:0x668b68></h1>
+
+<p>```</p>
+
+<p>The following code uses a class factory to create a new class along with getter and setters for the fields passed into it:
+```ruby
+class ClassFactory
+  def self.create_class(new_class, *fields)</p>
+
+<pre><code>c = Class.new do
+  fields.each do |field|
+    define_method field.intern do
+      instance_variable_get("@#{field}")
+    end
+    define_method "#{field}=".intern do |arg|
+      instance_variable_set("@#{field}", arg)
+    end
+  end
+end
+
+Kernel.const_set new_class, c
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>ClassFactory.create_class "Car", "make", "model", "year"</p>
+
+<p>new_class = Car.new
+new_class.make = "Nissan"
+puts new_class.make # => "Nissan"
+new_class.model = "Maxima"
+puts new_class.model # => "Maxima"
+new_class.year = "2001"
+puts new_class.year # => "2001"
+```
+In Ruby, classes are simply objects like any other, which are then assigned to a constant.  Hence, to create a new class dynamically we instantiate the class Class with Class.new, and then assign it to a constant via const_set (we invoke it on Kernel so that it is a top-level constant like any other class).  We then add the code that makes up the class in a do-end block.</p>
+
+<p>In that do-end block, for each field we invoke define_method twice, first for the getter method and then the setter method with get_instance_variable and set_instance_variable, respectively.  For each field, we create the instance variables (e.g., for make, we use @make).  Note how we make use of passing the argument in for the setter.</p>
+
+<p>Additionally, if I wanted to make the class a sub-class, I could have used Class.new(parent_class)</p>
+]]></content>
+  </entry>
+  
+</feed>

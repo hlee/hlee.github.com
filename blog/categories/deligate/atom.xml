@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: deligate | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/deligate/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Deligate in ActiveRecord to avoid dots]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/14/using-deligate-in-activerecord-to-avoid-dots/"/>
+    <updated>2012-11-14T09:55:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/14/using-deligate-in-activerecord-to-avoid-dots</id>
+    <content type="html"><![CDATA[<h2>Adding deligate method in the model</h2>
+
+<p>There are various situations where we might be using methods from the child
+model from its parents model.</p>
+
+<p>Common example is user and posts</p>
+
+<p>```ruby
+class Post
+  belongs_to :user
+end</p>
+
+<p>class User
+  has_many :posts
+end
+```</p>
+
+<p>To make a call to find a post with category 'ruby' for a User</p>
+
+<p><code>ruby
+User.first.posts.find_by_category('ruby')
+</code></p>
+
+<p>If this is being used in multiple places, adding a deligate will make our life easy, thereby avoiding mulitple dots.
+Also User model doesnt have to know the inner methods of the posts model and a logic change in the model Post would not require multiple changes</p>
+
+<p><code>ruby
+class Post
+  belongs_to :user
+  delegate :find_by_category, :to =&gt; :user, :allow_nil =&gt; true
+end
+</code></p>
+
+<p>now the following code will work.
+<code>ruby
+User.first.find_by_category('ruby')
+</code></p>
+
+<p>There is an option to allow prefix as well</p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

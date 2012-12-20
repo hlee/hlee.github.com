@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ps | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/ps/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Working with Processes in Unix]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/24/working-with-processes-in-unix/"/>
+    <updated>2012-11-24T07:08:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/24/working-with-processes-in-unix</id>
+    <content type="html"><![CDATA[<p>There are two commands heavily used by developers for checking their pocesses
+in unix.</p>
+
+<ol>
+<li>Firstly it is the search for processes</li>
+</ol>
+
+
+<p><code>sh
+ps -ef | grep search_process
+</code></p>
+
+<p>or</p>
+
+<p><code>sh
+ps aux | grep search_process
+</code></p>
+
+<p>what's the difference, well both do the same task</p>
+
+<p><a href="http://askubuntu.com/questions/129962/ps-ef-vs-ps-aux">link</a></p>
+
+<p>Both list all processes of all users. In that aspect -e and ax are completely equivalent.
+Where they differ is output format specifier, -f is "full", while u is "user-oriented". The displayed columns are different:
+columns for ps -f
+UID PID PPID C STIME TTY TIME CMD</p>
+
+<p>columns for ps u
+USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</p>
+
+<p>The difference between ps -ef and ps aux is due to historical divergences between POSIX and BSD systems.
+At the beginning, POSIX accepted the -ef while the BSD accepted only the aux form.</p>
+
+<ol>
+<li>Secondly to kill the process that we just found</li>
+</ol>
+
+
+<p><code>sh
+kill -9 pid
+</code></p>
+
+<p>or</p>
+
+<p><code>sh
+kill -SIGKILL PID
+</code></p>
+
+<p>or if we know the process name and if the unix system supports</p>
+
+<p><code>sh
+killall nginx
+</code></p>
+
+<p>Tip: What if we need to kill all the processes that starts with 'schedule'.
+Here it is..</p>
+
+<p><code>sh
+ps aux | grep schedule | grep -v grep | awk '{print $2}' | xargs kill -9
+</code></p>
+
+<p>A quick description of the steps:</p>
+
+<ol>
+<li>"ps aux | grep schedule" searches for the processes by the name schedule and
+returns the rows</li>
+<li>"grep -v grep" excludes grep from the searched process list (rows)</li>
+<li>"awk '{print $2}'" prints the second column of all the values returned.
+Which is mostly the process Id, if not choose the corresponding column by
+its number of appearance in the rows returned</li>
+<li>"xargs kill -9" sends the kill signal to all the selected process Ids</li>
+</ol>
+
+
+<p>Please make sure that you are searching for the right processes before killing them.</p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

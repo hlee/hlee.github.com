@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ipfw | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/ipfw/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How to proxy a domain to localhost]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/09/how-to-proxy-a-domain-as-local/"/>
+    <updated>2012-11-09T14:29:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/09/how-to-proxy-a-domain-as-local</id>
+    <content type="html"><![CDATA[<ul>
+<li>STEP 1:</li>
+</ul>
+
+
+<p>Edit your hosts file by typing:</p>
+
+<p><code>bash
+sudo vim /etc/hosts
+</code></p>
+
+<p>Add the following line to the file:</p>
+
+<p><code>bash
+127.0.0.1 google.com (or whatever other hostname you want proxied)
+</code></p>
+
+<ul>
+<li>STEP 2:</li>
+</ul>
+
+
+<p>Type the following into the command line to (ip foward)set up the server port to 80 in this case it is 3000:
+<code>bash
+sudo ipfw add 100 fwd 127.0.0.1,3000 tcp from any to any 80 in
+</code></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

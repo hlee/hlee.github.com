@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: include | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/include/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Extend vs Include in Ruby Module]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/24/extend-vs-include-in-ruby-module/"/>
+    <updated>2012-11-24T08:04:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/24/extend-vs-include-in-ruby-module</id>
+    <content type="html"><![CDATA[<p><strong>Extend vs. Include</strong>
+Modules are used for mixins, ruby's way of handling muliple inheritance without the complications.
+There are two ways to mixin, either include or extend to mix in a module’s functionality into a class.</p>
+
+<p><strong>Difference:</strong></p>
+
+<p>include makes the module’s methods available to the instance of a class,
+attached to the instances of the class alone.</p>
+
+<p>```ruby
+module Foo
+  def foo</p>
+
+<pre><code>puts 'heyyyyoooo!'
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class Bar
+  include Foo
+end</p>
+
+<p>Bar.new.foo # heyyyyoooo!
+Bar.foo # NoMethodError: undefined method ‘foo’ for Bar:Class
+```</p>
+
+<p>extend makes these methods available to the class as class methods, implemented
+with a self &lt;&lt; class*</p>
+
+<p>```ruby
+class Baz
+  extend Foo
+end</p>
+
+<p>Baz.foo # heyyyyoooo!
+Baz.new.foo # NoMethodError: undefined method ‘foo’ for #&lt;Baz:0x1e708></p>
+
+<p>```</p>
+
+<p>More information here at the <a href="http://railstips.org/blog/archives/2009/05/15/include-vs-extend-in-ruby/">source link</a>.</p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[learn by practice extend and include]]></title>
+    <link href="http://hlee.github.com/blog/2010/03/25/learn-by-practice-extend-and-include/"/>
+    <updated>2010-03-25T18:07:00-04:00</updated>
+    <id>http://hlee.github.com/blog/2010/03/25/learn-by-practice-extend-and-include</id>
+    <content type="html"><![CDATA[<p>Here is some examples to help understand extend and include
+```ruby
+module M_A
+  def test</p>
+
+<pre><code>puts true
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>module M_B
+  def test</p>
+
+<pre><code>puts false
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class A
+  include M_A
+  def meta_class</p>
+
+<pre><code>class &lt;&lt; A; self; end;
+</code></pre>
+
+<p>  end
+end
+A.test
+A.new.test
+A.instance_methods.grep /test/
+A.new.meta_class.singleton_methods.grep /test/
+class A
+  include M_B
+end
+A.new.test</p>
+
+<p>class B
+  def B.meta_class</p>
+
+<pre><code>class &lt;&lt; B; self; end;
+</code></pre>
+
+<p>  end
+  class &lt;&lt; self</p>
+
+<pre><code>def meta_class2
+  class &lt;&lt; B; self; end;
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>B.extend M_A
+B.test
+B.new.test
+B.singleton_methods.grep /test/
+B.meta_class.instance_methods.grep /test/
+```
+So class have singleton_methods, that should live in the meta_class and that method should be a instance method there
+extend just put test method to meta class. then later one will cover the first one</p>
+
+<p>result
+```ruby</p>
+
+<p>1.9.3p327 :048 > A.test
+NoMethodError: private method `test' called for A:Class</p>
+
+<pre><code>from (irb):48
+from /home/rharrington/.rvm/rubies/ruby-1.9.3-p327/bin/irb:16:in `&lt;main&gt;'
+</code></pre>
+
+<p>1.9.3p327 :049 > A.new.test
+false
+ => nil
+1.9.3p327 :050 > A.instance_methods.grep /test/
+ => [:test]
+1.9.3p327 :051 > A.new.meta_class.singleton_methods.grep /test/
+ => []
+1.9.3p327 :052 > B.extend M_A
+ => B
+1.9.3p327 :053 > B.test
+true
+ => nil
+1.9.3p327 :054 > B.new.test
+NoMethodError: private method `test' called for #&lt;B:0x0000000088c5e8></p>
+
+<pre><code>from (irb):54
+from /home/rharrington/.rvm/rubies/ruby-1.9.3-p327/bin/irb:16:in `&lt;main&gt;'
+</code></pre>
+
+<p>1.9.3p327 :055 > B.singleton_methods.grep /test/
+ => [:test]
+1.9.3p327 :056 > B.meta_class.instance_methods.grep /test/
+ => [:test]</p>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+</feed>

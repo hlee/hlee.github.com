@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: pg | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/pg/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[heroku deploy procedure]]></title>
+    <link href="http://hlee.github.com/blog/2012/12/02/heroku-deploy-procedure/"/>
+    <updated>2012-12-02T09:09:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/12/02/heroku-deploy-procedure</id>
+    <content type="html"><![CDATA[<p>Just keep record of the procedure to deploy heroku
+<strong>install heroku</strong>
+heroku gem(deprecated) or <a href="https://toolbelt.heroku.com/">toolbelt</a>
+```ruby
+sudo aptitude install heroku-toolbelt</p>
+
+<h1>or for ubuntu</h1>
+
+<p>wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+<code>
+**login with credentials**
+</code>ruby
+heroku login</p>
+
+<h1>Enter your Heroku credentials.</h1>
+
+<h1>Email: adam@example.com</h1>
+
+<h1>Password:</h1>
+
+<h1>Could not find an existing public key.</h1>
+
+<h1>Would you like to generate one? [Yn]</h1>
+
+<h1>Generating new SSH public key.</h1>
+
+<h1>Uploading ssh public key /Users/adam/.ssh/id_rsa.pub</h1>
+
+<p><code>
+**create app**
+</code>ruby
+heroku create
+heroku rename
+heroku help
+```
+add to git and make a commit</p>
+
+<p><strong>push and deploy</strong>
+```ruby</p>
+
+<h1>change Gemfile put sqlite3 to development</h1>
+
+<h1>add pg to production</h1>
+
+<h1>if you change Gemfile you need to git commit again otherwise heroku will not know</h1>
+
+<p>git push heroku master
+```
+if you got error</p>
+
+<blockquote><p>Permission denied (publickey).
+fatal: The remote end hung up unexpectedly</p></blockquote>
+
+<p>try
+and reference <a href="https://devcenter.heroku.com/articles/keys#adding_keys_to_heroku">add keys to heroku</a>
+<code>ruby
+heroku keys:add ~/.ssh/id_rsa.pub
+ssh-keygen -t rsa -f id_rsa
+git clone git@heroku.com:stark-dawn-1234.git -o heroku
+heroku keys:clear
+heroku keys:add
+</code></p>
+
+<p><strong>migration and open</strong></p>
+
+<p><code>ruby
+heroku run rake db:migrate
+heroku run console
+heroku logs
+heroku open
+</code></p>
+]]></content>
+  </entry>
+  
+</feed>

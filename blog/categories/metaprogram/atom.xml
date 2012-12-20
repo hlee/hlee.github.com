@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: metaprogram | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/metaprogram/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[learn by practice extend and include]]></title>
+    <link href="http://hlee.github.com/blog/2010/03/25/learn-by-practice-extend-and-include/"/>
+    <updated>2010-03-25T18:07:00-04:00</updated>
+    <id>http://hlee.github.com/blog/2010/03/25/learn-by-practice-extend-and-include</id>
+    <content type="html"><![CDATA[<p>Here is some examples to help understand extend and include
+```ruby
+module M_A
+  def test</p>
+
+<pre><code>puts true
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>module M_B
+  def test</p>
+
+<pre><code>puts false
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class A
+  include M_A
+  def meta_class</p>
+
+<pre><code>class &lt;&lt; A; self; end;
+</code></pre>
+
+<p>  end
+end
+A.test
+A.new.test
+A.instance_methods.grep /test/
+A.new.meta_class.singleton_methods.grep /test/
+class A
+  include M_B
+end
+A.new.test</p>
+
+<p>class B
+  def B.meta_class</p>
+
+<pre><code>class &lt;&lt; B; self; end;
+</code></pre>
+
+<p>  end
+  class &lt;&lt; self</p>
+
+<pre><code>def meta_class2
+  class &lt;&lt; B; self; end;
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>B.extend M_A
+B.test
+B.new.test
+B.singleton_methods.grep /test/
+B.meta_class.instance_methods.grep /test/
+```
+So class have singleton_methods, that should live in the meta_class and that method should be a instance method there
+extend just put test method to meta class. then later one will cover the first one</p>
+
+<p>result
+```ruby</p>
+
+<p>1.9.3p327 :048 > A.test
+NoMethodError: private method `test' called for A:Class</p>
+
+<pre><code>from (irb):48
+from /home/rharrington/.rvm/rubies/ruby-1.9.3-p327/bin/irb:16:in `&lt;main&gt;'
+</code></pre>
+
+<p>1.9.3p327 :049 > A.new.test
+false
+ => nil
+1.9.3p327 :050 > A.instance_methods.grep /test/
+ => [:test]
+1.9.3p327 :051 > A.new.meta_class.singleton_methods.grep /test/
+ => []
+1.9.3p327 :052 > B.extend M_A
+ => B
+1.9.3p327 :053 > B.test
+true
+ => nil
+1.9.3p327 :054 > B.new.test
+NoMethodError: private method `test' called for #&lt;B:0x0000000088c5e8></p>
+
+<pre><code>from (irb):54
+from /home/rharrington/.rvm/rubies/ruby-1.9.3-p327/bin/irb:16:in `&lt;main&gt;'
+</code></pre>
+
+<p>1.9.3p327 :055 > B.singleton_methods.grep /test/
+ => [:test]
+1.9.3p327 :056 > B.meta_class.instance_methods.grep /test/
+ => [:test]</p>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: irb | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/irb/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[binding pry to rails console]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/20/binding-pry-to-rails-console/"/>
+    <updated>2012-11-20T21:13:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/20/binding-pry-to-rails-console</id>
+    <content type="html"><![CDATA[<p>Add the following lines to make the rails console to use pry. make sure that</p>
+
+<p>File: Gemfile</p>
+
+<p><code>ruby
+gem 'pry'
+</code></p>
+
+<p>File: config/environments/development.rb</p>
+
+<p><code>ruby
+silence_warnings do
+  require 'pry'
+  IRB = Pry
+end
+</code></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails3 | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/rails3/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[heroku deploy procedure]]></title>
+    <link href="http://hlee.github.com/blog/2012/12/02/heroku-deploy-procedure/"/>
+    <updated>2012-12-02T09:09:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/12/02/heroku-deploy-procedure</id>
+    <content type="html"><![CDATA[<p>Just keep record of the procedure to deploy heroku
+<strong>install heroku</strong>
+heroku gem(deprecated) or <a href="https://toolbelt.heroku.com/">toolbelt</a>
+```ruby
+sudo aptitude install heroku-toolbelt</p>
+
+<h1>or for ubuntu</h1>
+
+<p>wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+<code>
+**login with credentials**
+</code>ruby
+heroku login</p>
+
+<h1>Enter your Heroku credentials.</h1>
+
+<h1>Email: adam@example.com</h1>
+
+<h1>Password:</h1>
+
+<h1>Could not find an existing public key.</h1>
+
+<h1>Would you like to generate one? [Yn]</h1>
+
+<h1>Generating new SSH public key.</h1>
+
+<h1>Uploading ssh public key /Users/adam/.ssh/id_rsa.pub</h1>
+
+<p><code>
+**create app**
+</code>ruby
+heroku create
+heroku rename
+heroku help
+```
+add to git and make a commit</p>
+
+<p><strong>push and deploy</strong>
+```ruby</p>
+
+<h1>change Gemfile put sqlite3 to development</h1>
+
+<h1>add pg to production</h1>
+
+<h1>if you change Gemfile you need to git commit again otherwise heroku will not know</h1>
+
+<p>git push heroku master
+```
+if you got error</p>
+
+<blockquote><p>Permission denied (publickey).
+fatal: The remote end hung up unexpectedly</p></blockquote>
+
+<p>try
+and reference <a href="https://devcenter.heroku.com/articles/keys#adding_keys_to_heroku">add keys to heroku</a>
+<code>ruby
+heroku keys:add ~/.ssh/id_rsa.pub
+ssh-keygen -t rsa -f id_rsa
+git clone git@heroku.com:stark-dawn-1234.git -o heroku
+heroku keys:clear
+heroku keys:add
+</code></p>
+
+<p><strong>migration and open</strong></p>
+
+<p><code>ruby
+heroku run rake db:migrate
+heroku run console
+heroku logs
+heroku open
+</code></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[how to use observer and call back]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/12/how-to-use-observer-and-call-back/"/>
+    <updated>2012-11-12T15:07:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/12/how-to-use-observer-and-call-back</id>
+    <content type="html"><![CDATA[<ul>
+<li>Add configuration</li>
+</ul>
+
+
+<p>```ruby</p>
+
+<h1>config/application.rb</h1>
+
+<p>config.active_record.observers = :order_observer
+```</p>
+
+<ul>
+<li>Create a Observer Class</li>
+</ul>
+
+
+<p>```ruby</p>
+
+<pre><code>class OrderObserver &lt; ActiveRecord::Observer
+  def after_update(order)
+    order.update_column('type_state', "UPDATED")
+  end
+end 
+</code></pre>
+
+<p>```
+or we can use the way to register</p>
+
+<p>```ruby</p>
+
+<pre><code>#config/application.rb
+config.active_record.observers = :notification_observer
+
+class NotificationObserver &lt; ActiveRecord::Observer
+  observe :account, :balance
+
+  def after_update(order)
+    order.update_column('type_state', "UPDATED")
+  end
+end 
+</code></pre>
+
+<p>```</p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[some ruby on rails interview questions]]></title>
+    <link href="http://hlee.github.com/blog/2012/08/04/some-ruby-on-rails-interview-questions/"/>
+    <updated>2012-08-04T18:22:00-04:00</updated>
+    <id>http://hlee.github.com/blog/2012/08/04/some-ruby-on-rails-interview-questions</id>
+    <content type="html"><![CDATA[<p><strong>what's N+1 problem, how to solve the problem</strong>
+```ruby
+clients = Client.limit(10)</p>
+
+<p>clients.each do |client|
+  puts client.address.postcode
+end</p>
+
+<p>clients = Client.includes(:address).limit(10)</p>
+
+<p>clients.each do |client|
+  puts client.address.postcode
+end</p>
+
+<p>```
+<strong>what's the different with joins and includes</strong></p>
+
+<p><strong>explain eager loading and lazy loading</strong></p>
+
+<p><strong>how to get the top 10 average rating product name:</strong>
+```ruby
+Product: name:string, id:integer,
+Review: id:integer, rating:integer, product_id: integer</p>
+
+<h1>solution</h1>
+
+<p>select p.name from products as p inner join review as r group by r.prouct_id order avg(r.rating) limit 10
+```</p>
+
+<p><strong>using map and reduce to sum up 5 to 26 which is squareable</strong></p>
+
+<p>```ruby
+module SQ
+  def square num</p>
+
+<pre><code>num.times.each do |i|
+  return true if i * i == num
+end
+false
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>5.upto(26).inject(0){|sum,x|sum = sum + x if square(x);sum }
+5.upto(26).inject(0){|sum,x|sum = sum + (square(x) ? x : 0 ) }
+```</p>
+
+<p><strong>dynamic load</strong></p>
+
+<p>```ruby
+module A
+  def check_credit</p>
+
+<pre><code>puts "A"
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>module B
+  def check_credit</p>
+
+<pre><code>puts "B"
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class P
+  attr_accessor :type
+  def process</p>
+
+<pre><code>#class_eval
+#self &lt;&lt; class
+  #include eval(type)
+#end
+type.constantize.check_credit
+
+check_credit
+</code></pre>
+
+<p>  end
+end
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

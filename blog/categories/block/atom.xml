@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: block | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/block/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[retry and retry code blocks]]></title>
+    <link href="http://hlee.github.com/blog/2011/12/26/retry-and-retry-code-blocks/"/>
+    <updated>2011-12-26T06:20:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2011/12/26/retry-and-retry-code-blocks</id>
+    <content type="html"><![CDATA[<h2>simple way to rescue and retry several</h2>
+
+<p>```ruby
+tries = 0
+begin
+  # some routine
+rescue
+  tries += 1
+  retry if tries &lt;= 3
+  puts "no dice!"
+end</p>
+
+<h1>or</h1>
+
+<p>3.times do
+  begin</p>
+
+<pre><code>...
+</code></pre>
+
+<p>  rescue</p>
+
+<pre><code>...
+</code></pre>
+
+<p>  end
+  break
+end
+```</p>
+
+<h2>with_rescue</h2>
+
+<p>```ruby
+class Integer
+  def times_try</p>
+
+<pre><code>n = self
+begin
+  n -= 1
+  yield
+rescue
+  raise if n &lt; 0
+  retry
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>begin
+  3.times_try do</p>
+
+<pre><code>#some routine
+</code></pre>
+
+<p>  end
+rescue
+  puts 'no dice!'
+end</p>
+
+<p>```</p>
+
+<p>if you don't want to define</p>
+
+<p><code>ruby
+begin
+  #your code
+rescue
+  retry if _r = (_r || 0) + 1 and _r &lt; 4
+  raise
+end
+</code></p>
+
+<p>```ruby
+with_rescue(ProtocolError, :limit => 5) do |try|
+  if try == 0</p>
+
+<pre><code>self.send('HTTP/1.1')
+</code></pre>
+
+<p>  else</p>
+
+<pre><code>self.send('HTTP/1.0')
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h2>Retry Block Code</h2>
+
+<p>```ruby</p>
+
+<h1>Options:</h1>
+
+<h1>* :tries - Number of retries to perform. Defaults to 1.</h1>
+
+<h1>* :on - The Exception on which a retry will be performed. Defaults to Exception, which retries on any Exception.</h1>
+
+<p>#</p>
+
+<h1>Example</h1>
+
+<h1>=======</h1>
+
+<h1>retryable(:tries => 1, :on => OpenURI::HTTPError) do</h1>
+
+<h1># your code here</h1>
+
+<h1>end</h1>
+
+<p>#
+def retryable(options = {}, &amp;block)
+  opts = { :tries => 1, :on => Exception }.merge(options)</p>
+
+<p>  retry_exception, retries = opts[:on], opts[:tries]</p>
+
+<p>  begin</p>
+
+<pre><code>return yield
+</code></pre>
+
+<p>  rescue retry_exception</p>
+
+<pre><code>retry if (retries -= 1) &gt; 0
+</code></pre>
+
+<p>  end</p>
+
+<p>  yield
+end
+```</p>
+
+<p>us it as</p>
+
+<p>```ruby</p>
+
+<p>retryable(:tries => 5, :on => OpenURI::HTTPError) do
+  open('http://example.com/flaky_api')
+  # Code that mashes up stuff for your "social networking" site.
+end
+```</p>
+
+<p>Here are the <tt><a href="http://pastie.caboo.se/138570">Kernel#retryable specs (pastie)</a></tt><a href="http://blog.codefront.net/2008/01/14/retrying-code-blocks-in-ruby-on-exceptions-whatever/">.</a></p>
+]]></content>
+  </entry>
+  
+</feed>

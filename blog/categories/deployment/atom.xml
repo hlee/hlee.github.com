@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: deployment | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/deployment/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up Heroku]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/15/setting-up-heroku/"/>
+    <updated>2012-11-15T11:01:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/15/setting-up-heroku</id>
+    <content type="html"><![CDATA[<h2>Here are the steps to push a rails project to Heroku</h2>
+
+<ol>
+<li>Install Heroku</li>
+</ol>
+
+
+<p><code>sh
+gem install heroku
+</code></p>
+
+<p><strong>2. Create a heroku login with email and password</strong></p>
+
+<p><code>sh
+heroku Create
+</code></p>
+
+<p>3) Change the name of the app</p>
+
+<p><code>sh
+heroku apps:rename demo-app
+</code></p>
+
+<p><a href="https://devcenter.heroku.com/articles/renaming-apps">devcenter rename link</a></p>
+
+<p>4) Push the file to heroku</p>
+
+<p><code>sh
+git push heroku master
+</code></p>
+
+<p><a href="https://devcenter.heroku.com/articles/git">devcenter git link</a></p>
+
+<p>5) Check the database</p>
+
+<p><code>sh
+heroku run rake db:version
+</code></p>
+
+<p><a href="https://devcenter.heroku.com/articles/rake">devcenter rake link</a></p>
+
+<p>7) Perform a db migrate</p>
+
+<p><code>sh
+heroku run rake --trace db:migrate
+</code></p>
+
+<p>8) Console:</p>
+
+<p><code>sh
+heroku run console
+</code></p>
+
+<h2>Further reading:</h2>
+
+<p><a href="https://devcenter.heroku.com">devcenter link</a></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

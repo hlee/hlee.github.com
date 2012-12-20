@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rspec | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/rspec/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[rspec test failed after changing to capybara-webkit]]></title>
+    <link href="http://hlee.github.com/blog/2012/12/09/rspec-test-failed-after-changing-to-capybara-webkit/"/>
+    <updated>2012-12-09T06:03:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/12/09/rspec-test-failed-after-changing-to-capybara-webkit</id>
+    <content type="html"><![CDATA[<h2>problem as</h2>
+
+<p>written some RSpec test for my rails 3.2 application and because I was annyoed by the Browser popping up ich tried to change from firefox to capybara-webkit. After this all tests still run, except one. The line that is failing is:
+<code>ruby
+expect { click_button "Create" }.to change(Answer, :count).by(count)
+</code></p>
+
+<p>solution is easy, The simplest way to resolve this is to wait before checking:
+<code>ruby
+expect { click_button "Create"; sleep 2 }.to change(Answer, :count).by(count)
+</code>
+There is a race condition here between Capybara sending the click action to the server and your test checking the database.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up RSpec and Cucumber]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/14/setting-up-rspec-and-cucumber/"/>
+    <updated>2012-11-14T09:04:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/14/setting-up-rspec-and-cucumber</id>
+    <content type="html"><![CDATA[<h2>Including RSpec in your code:</h2>
+
+<p><strong>Add the following in your Gemfile</strong>
+File: Gemfile
+<code>ruby
+group :test, :development do
+  gem "rspec-rails", "~&gt; 2.0"
+end
+</code></p>
+
+<p><code>sh
+bundle
+</code></p>
+
+<p><strong>Installing RSpec</strong>
+<code>sh
+rails g rspec:install
+</code></p>
+
+<p><strong>Configuring RSpec</strong></p>
+
+<p>File: config/application.rb</p>
+
+<p><code>ruby
+config.generators do |g|
+  g.test_framework :rspec
+  g.integration_tool :rspec
+end
+</code></p>
+
+<p>Now adding a new scaffold or resource will automatically include the RSpecs to help
+test the code</p>
+
+<p><code>sh
+rails g scaffold book title author
+rake db:migrate
+RAILS_ENV=test rake db:migrate
+</code></p>
+
+<p><strong>Running the Specs</strong></p>
+
+<p><code>sh
+rspec spec
+</code></p>
+
+<p>You can also specify the file name and the line number for running individual
+specs</p>
+
+<h2>Including Cucumber in your Code</h2>
+
+<p><strong>Add the following in your Gemfile</strong>
+File: Gemfile</p>
+
+<p><code>ruby
+group :test, :development do
+  gem 'cucumber-rails', require: false
+end
+</code></p>
+
+<p><strong>Installing Cucumber</strong></p>
+
+<p><code>sh
+rails g cucumber:install
+</code></p>
+
+<p><strong>For learners who are looking to setup the cucumber for the first time</strong></p>
+
+<p>Use <a href="https://github.com/cucumber/cucumber-rails-training-wheels">Traing Wheels</a></p>
+
+<p>File: Gemfile
+<code>ruby
+gem "cucumber-rails-training-wheels", :group =&gt; :test
+</code>
+<strong>Installing Cucumber</strong>
+rails generate cucumber_rails_training_wheels:install</p>
+
+<p><strong>Set up Cucumber Training Wheels before Scaffolding</strong></p>
+
+<p><code>sh
+rails generate cucumber_rails_training_wheels:feature post title:string body:text number:integer published:boolean
+rails generate scaffold post title:string body:text number:integer published:boolean
+</code></p>
+
+<p><strong>Testing the Features</strong></p>
+
+<p><code>sh
+cucumber features
+</code></p>
+
+<p><strong>If you face Issues with Tableish in your features</strong></p>
+
+<p>Replace:
+<code>ruby
+tableish('table tr', 'td,th')
+</code>
+With:
+<code>ruby
+find('table').all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
+</code></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[webkit and rspec without x server]]></title>
+    <link href="http://hlee.github.com/blog/2011/11/06/webkit-and-rspec-without-x-server/"/>
+    <updated>2011-11-06T07:05:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2011/11/06/webkit-and-rspec-without-x-server</id>
+    <content type="html"><![CDATA[<h2>capybara-webkit</h2>
+
+<p>problems running capybara-webkit with the Headless gem, Xvfb and our ci server. We use this setup for automatic integration testing and javascript testing of our Ruby on Rails 3.2 app. During the tests it complains that</p>
+
+<blockquote><p>webkit_server: cannot connect to X server
+need to rspec to config as:</p></blockquote>
+
+<p>```ruby
+require File.expand_path("../../config/environment", <strong>FILE</strong>)
+require 'rspec/rails'
+require 'rspec/autorun'
+require 'capybara/rspec'
+require 'capybara/webkit'
+require 'headless'</p>
+
+<p>Capybara.register_driver :webkit do |app|
+  Capybara::Driver::Webkit.new(app, :ignore_ssl_errors => true)
+end</p>
+
+<p>Capybara.javascript_driver = :webkit</p>
+
+<h1>don't run on the local machine (since we don't have xvfb running locally)</h1>
+
+<p>if Rails.env.production?</p>
+
+<pre><code>headless = Headless.new
+headless.start
+</code></pre>
+
+<p>end
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[ruby selenium-webdriver watir-webdriver]]></title>
+    <link href="http://hlee.github.com/blog/2011/10/26/ruby-selenium-webdriver-watir-webdriver/"/>
+    <updated>2011-10-26T08:12:00-04:00</updated>
+    <id>http://hlee.github.com/blog/2011/10/26/ruby-selenium-webdriver-watir-webdriver</id>
+    <content type="html"><![CDATA[<p>There are many other Selenium gems out there, but this is the only official, maintained gem. If you're looking for a slightly higher level API built on the same technology, you may want to check out <a href="http://watirwebdriver.com/">watir-webdriver</a> or <a href="https://github.com/jnicklas/capybara">capybara</a>.</p>
+
+<h2>example code</h2>
+
+<p>```ruby
+require "selenium-webdriver"</p>
+
+<p>driver = Selenium::WebDriver.for :firefox
+driver.navigate.to "http://google.com"</p>
+
+<p>element = driver.find_element(:name, 'q')
+element.send_keys "Hello WebDriver!"
+element.submit</p>
+
+<p>puts driver.title</p>
+
+<p>driver.quit</p>
+
+<h1>execute arbitrary javascript</h1>
+
+<p>puts driver.execute_script("return window.location.pathname")</p>
+
+<h1>pass elements between Ruby and JavaScript</h1>
+
+<p>element = driver.execute_script("return document.body")
+driver.execute_script("return arguments[0].tagName", element) #=> "BODY"</p>
+
+<h1>wait for a specific element to show up</h1>
+
+<p>wait = Selenium::WebDriver::Wait.new(:timeout => 10) # seconds
+wait.until { driver.find_element(:id => "foo") }</p>
+
+<h1>switch to a frame</h1>
+
+<p>driver.switch_to.frame "some-frame" # name or id
+driver.switch_to.frame driver.find_element(:id, 'some-frame') # frame element</p>
+
+<h1>switch back to the main document</h1>
+
+<p>driver.switch_to.default_content</p>
+
+<h1>repositionning and resizing browser window:</h1>
+
+<p>driver.manage.window.move_to(300, 400)
+driver.manage.window.resize_to(500, 800)
+driver.manage.window.maximize</p>
+
+<h1>get an attribute</h1>
+
+<p>class_name = element.attribute("class")</p>
+
+<h1>is the element visible on the page?</h1>
+
+<p>element.displayed?</p>
+
+<h1>click the element</h1>
+
+<p>element.click</p>
+
+<h1>get the element location</h1>
+
+<p>element.location</p>
+
+<h1>scroll the element into view, then return its location</h1>
+
+<p>element.location_once_scrolled_into_view</p>
+
+<h1>get the width and height of an element</h1>
+
+<p>element.size</p>
+
+<h1>press space on an element - see Selenium::WebDriver::Keys for possible values</h1>
+
+<p>element.send_keys :space</p>
+
+<h1>get the text of an element</h1>
+
+<p>element.text
+```</p>
+
+<h2>SSL Certificates</h2>
+
+<p>The Firefox driver ignores invalid SSL certificates by default. If this is not the behaviour you want, you can do:
+```ruby
+profile = Selenium::WebDriver::Firefox::Profile.new
+profile.secure_ssl = true</p>
+
+<p>driver = Selenium::WebDriver.for :firefox, :profile => profile
+<code>
+There is an edge case where the default SSL certificate check will not work correctly. WebDriver assumes that the certificate is untrusted whenever there's a problem, which means a certificate from a trusted issuer but with a hostname mismatch (e.g. a production certificate in a test environment) will not be correctly ovverriden. See UntrustedSSLCertificates for more on why this is. To work around it, tell the Firefox driver to not assume the issuer is untrusted:
+</code>ruby
+profile = Selenium::WebDriver::Firefox::Profile.new
+profile.assume_untrusted_certificate_issuer = false
+driver = Selenium::WebDriver.for :firefox, :profile => profile
+```
+Not that Profile#secure_ssl remains set to the default value of true in the above example<a href="http://code.google.com/p/selenium/wiki/RubyBindings">.</a></p>
+]]></content>
+  </entry>
+  
+</feed>

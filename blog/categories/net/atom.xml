@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: net | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/net/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using NET to Post API Calls With or Without Secure Connections]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/using-net-to-post/"/>
+    <updated>2012-11-28T06:45:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/using-net-to-post</id>
+    <content type="html"><![CDATA[<p>Using Net module is the best and the eaiest ways to post data or make api calls
+to urls. Here's an example</p>
+
+<p>```ruby</p>
+
+<p>def post_using_net(url, params={})
+  uri = URI.parse(url)
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  response = http.post(uri.request_uri, params.to_query)
+  response
+end
+```</p>
+
+<p>for connections that does not use ssl i.e (https) the following can be removed</p>
+
+<p>```ruby
+  http.use_ssl = true
+  http.verify_mode = OpenSSL::SSL::VERIFY_NONE</p>
+
+<p>```</p>
+
+<p>Net also handles get, put and delete, to make it work for muliple requests,
+just use a send to make calls to the methods</p>
+
+<p><code>ruby
+def send_using_net(method, url, params={})
+  uri = URI.parse(url)
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = true
+  http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  response = http.send method, [uri.request_uri, params.to_query]
+  response
+end
+</code></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

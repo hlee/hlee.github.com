@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: questions | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/questions/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[some ruby on rails interview questions]]></title>
+    <link href="http://hlee.github.com/blog/2012/08/04/some-ruby-on-rails-interview-questions/"/>
+    <updated>2012-08-04T18:22:00-04:00</updated>
+    <id>http://hlee.github.com/blog/2012/08/04/some-ruby-on-rails-interview-questions</id>
+    <content type="html"><![CDATA[<p><strong>what's N+1 problem, how to solve the problem</strong>
+```ruby
+clients = Client.limit(10)</p>
+
+<p>clients.each do |client|
+  puts client.address.postcode
+end</p>
+
+<p>clients = Client.includes(:address).limit(10)</p>
+
+<p>clients.each do |client|
+  puts client.address.postcode
+end</p>
+
+<p>```
+<strong>what's the different with joins and includes</strong></p>
+
+<p><strong>explain eager loading and lazy loading</strong></p>
+
+<p><strong>how to get the top 10 average rating product name:</strong>
+```ruby
+Product: name:string, id:integer,
+Review: id:integer, rating:integer, product_id: integer</p>
+
+<h1>solution</h1>
+
+<p>select p.name from products as p inner join review as r group by r.prouct_id order avg(r.rating) limit 10
+```</p>
+
+<p><strong>using map and reduce to sum up 5 to 26 which is squareable</strong></p>
+
+<p>```ruby
+module SQ
+  def square num</p>
+
+<pre><code>num.times.each do |i|
+  return true if i * i == num
+end
+false
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>5.upto(26).inject(0){|sum,x|sum = sum + x if square(x);sum }
+5.upto(26).inject(0){|sum,x|sum = sum + (square(x) ? x : 0 ) }
+```</p>
+
+<p><strong>dynamic load</strong></p>
+
+<p>```ruby
+module A
+  def check_credit</p>
+
+<pre><code>puts "A"
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>module B
+  def check_credit</p>
+
+<pre><code>puts "B"
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class P
+  attr_accessor :type
+  def process</p>
+
+<pre><code>#class_eval
+#self &lt;&lt; class
+  #include eval(type)
+#end
+type.constantize.check_credit
+
+check_credit
+</code></pre>
+
+<p>  end
+end
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

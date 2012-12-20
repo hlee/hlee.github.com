@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: md5 | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/md5/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Working with Digests and Signatures]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/working-on-digests-and-signatures/"/>
+    <updated>2012-11-28T05:53:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/working-on-digests-and-signatures</id>
+    <content type="html"><![CDATA[<h3>MD5 digests</h3>
+
+<p>MD5 is a one-way hashing algorithm for creating digest "signatures" or checksums of strings. MD5 digests are 128 bit (16 byte) signatures. MD5 is the most common method of providing checksums for files downloaded over the internet.
+To create a checksum of an entire file or text convert the whole string.</p>
+
+<p><code>ruby
+digest = Digest::MD5.hexdigest(string_to_digest)
+</code></p>
+
+<p><a href="http://www.siaris.net/index.cgi/Programming/LanguageBits/Ruby/MD5.rdoc">source link</a></p>
+
+<h3>hmac-sha1</h3>
+
+<p>In cryptography, a hash-based message authentication code (HMAC) is a specific construction for calculating a message authentication code (MAC) involving a cryptographic hash function in combination with a secret cryptographic key. As with any MAC, it may be used to simultaneously verify both the data integrity and the authenticity of a message.</p>
+
+<p><a href="http://en.wikipedia.org/wiki/Hash-based_message_authentication_code">source link</a></p>
+
+<p>In ruby its simple to generate one:</p>
+
+<p>```ruby
+gem install ruby-hmac</p>
+
+<p>def hmac_sha1 params={}
+  require 'openssl'
+  secret_key = 'No telling a secret'
+  OpenSSL::HMAC.hexdigest('sha1', secret_key, params)
+end
+```</p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

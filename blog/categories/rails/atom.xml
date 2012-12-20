@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Applying Common Filtering for Rails Api Based Applications]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/26/applying-common-filtering-for-rails-api-based-applications/"/>
+    <updated>2012-11-26T22:50:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/26/applying-common-filtering-for-rails-api-based-applications</id>
+    <content type="html"><![CDATA[<p>Sometimes there are common sets of fields and id's that we would like the api
+to filter before sending the details to the client. It would be great if we can
+place them in a common place so that they can be changed anytime.</p>
+
+<p>File: lib/api_config.rb</p>
+
+<p>```ruby</p>
+
+<h1>Filters out the specified list of fields from the API calls</h1>
+
+<p>APIFILTERS = ['id','password','secret__internal_id','updated_at','created_at']
+```</p>
+
+<p>File: config/initializers/json_config.rb</p>
+
+<p>```ruby</p>
+
+<h1>Requiring the api configuration file</h1>
+
+<p>require 'api_config'</p>
+
+<p>class ActiveRecord::Base
+  def as_json_with_filter(options=Hash.new)</p>
+
+<pre><code>options[:except] = APIFILTERS
+as_json_without_filter(options)
+</code></pre>
+
+<p>  end
+  alias_method_chain :as_json, :filter
+end</p>
+
+<p>```
+the alias_method_chain does two things here:</p>
+
+<ul>
+<li><p>firstly it creates an alias method called as_json_without_filter to as_json</p></li>
+<li><p>secondly it looks for as_json_with_filter and makes that as the new as_json
+method</p></li>
+</ul>
+
+
+<p>The as_json method is one that gets called when the to_json method is called on a
+model object or a collection of model objects in rails</p>
+
+<p>example: users controller file</p>
+
+<p>```ruby</p>
+
+<p>class UsersController &lt; ApplicationController</p>
+
+<p>  respond_to :json</p>
+
+<p>  def show</p>
+
+<pre><code>@user = User.find(params[:id])
+respond_with @user
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>```</p>
+
+<p>the above would call the as_json method of the user model, we have just
+overridden the super class to filter out a few fields</p>
+
+<p>```ruby
+class User &lt; ActiveRecord::Base</p>
+
+<p>def as_json(options={})
+  super(:include => :parents)
+end</p>
+
+<p>```</p>
+
+<p>for xml, this is slightly Different</p>
+
+<p>File: config/initializers/xml_config.rb</p>
+
+<p>```ruby</p>
+
+<h1>Requiring the api configuration file</h1>
+
+<p>require 'api_config'</p>
+
+<p>class ActiveRecord::Base
+  alias_method :to_xml, :old_to_xml
+  def to_xml(options=Hash.new)</p>
+
+<pre><code>options[:except] = APIFILTERS
+old_to_xml(options)
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>```</p>
+
+<p>Any questions, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Initializing Custom YML Configuration Variables for Different Environments in Rails]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/26/initializing-custom-yml-configuration-variables-for-environments-in-rails/"/>
+    <updated>2012-11-26T22:22:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/26/initializing-custom-yml-configuration-variables-for-environments-in-rails</id>
+    <content type="html"><![CDATA[<p>Another common problem that rails developers face while developing web
+applications that connect to multiple external systems and api's is configuring
+the the same parameters for different environments.</p>
+
+<p>The simplest way -</p>
+
+<ul>
+<li><p>Add a folder to the config folder of your application</p></li>
+<li><p>Add all the configuration in as a yml file, like how we use the database.yml
+ with all the environments in it</p></li>
+</ul>
+
+
+<p>sample file: config/google_api.yml</p>
+
+<p><code>yml
+development: &amp;default_settings
+  google_analytics_id: 'UA-xxxxxxxx-1'
+test:
+  &lt;&lt;: *default_settings
+sandbox:
+  google_analytics_id: 'UA-xxxxxxxx-2'
+staging:
+  google_analytics_id: 'UA-xxxxxxxx-3'
+production:
+  google_analytics_id: 'UA-xxxxxxxx-4'
+</code>
+  the &amp;default_settings and *default_settings can be used to pass the same
+  values into another yml</p>
+
+<ul>
+<li><p>add the following to your rb file:</p>
+
+<p>File: config/environment.rb</p></li>
+</ul>
+
+
+<p>```ruby</p>
+
+<h1>Load the rails application</h1>
+
+<p>require File.expand_path('../application', <strong>FILE</strong>)</p>
+
+<h1>Auto Load APP_CONFIG for the corresponding environment configuration</h1>
+
+<p>APP_CONFIG = HashWithIndifferentAccess.new
+load_files = Dir["#{Rails.root}/config/app_config/*.yml"].each do |file|
+  APP_CONFIG.merge!(YAML.load_file(file)[Rails.env])
+end</p>
+
+<h1>Initialize the rails application</h1>
+
+<p>Livegamer::Application.initialize!</p>
+
+<p>```</p>
+
+<p>  The above code adds all the yml files inside the folder we created(app_config) under the config folder to a
+  hash(APP_CONFIG).</p>
+
+<ul>
+<li>Now we can use get the google analytics id with the following</li>
+</ul>
+
+
+<p><code>ruby
+google_id = APP_CONFIG['google_analytics_id']
+</code></p>
+
+<p>  This would return the corresponding configuration variable depending upon the
+  environment.</p>
+
+<p>  Simple.. :)</p>
+
+<p>  Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up a development mailer for Rails with a gmail account]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/24/setting-up-a-development-mailer-for-rails-with-a-gmail-account/"/>
+    <updated>2012-11-24T06:42:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/24/setting-up-a-development-mailer-for-rails-with-a-gmail-account</id>
+    <content type="html"><![CDATA[<p>Setting up the rails mailer for development purposes is much easier. using the
+action mailer to configure the gmail services, is just a few commands and
+configurations away...</p>
+
+<p>Make sure that these settings are not used in production.</p>
+
+<ol>
+<li>Firstly <a href="https://accounts.google.com/SignUp">Sign Up</a> for a dummy gmail account.</li>
+<li>Next add the following configuration in development.rb</li>
+</ol>
+
+
+<p>File: config/environments/development.rb</p>
+
+<p><code>sh
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  :address              =&gt; "smtp.gmail.com",
+  :port                 =&gt; 587,
+  :domain               =&gt; '&lt;your_domain&gt;',
+  :user_name            =&gt; '&lt;user_name&gt;',
+  :password             =&gt; '&lt;password&gt;',
+  :authentication       =&gt; 'plain',
+  :enable_starttls_auto =&gt; true  }
+</code></p>
+
+<p>Login to the gmail account and check the sent mails, to preview the sent mail.</p>
+
+<p>There's a lot more that can be done with this, check the <a href="http://guides.rubyonrails.org/action_mailer_basics.html#action-mailer-configuration-for-gmail">Rails Guids</a> for more information.</p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Debugging using pry]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/15/debugging-using-pry/"/>
+    <updated>2012-11-15T22:37:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/15/debugging-using-pry</id>
+    <content type="html"><![CDATA[<p><strong>Add the following gems to the Gemfile and bundle install</strong></p>
+
+<p>File: Gemfile</p>
+
+<p><code>ruby
+gem 'pry'
+gem 'pry-nav'
+gem 'pry-remote'
+</code></p>
+
+<p><strong>The pry-nav gem allows us to use the following command for adding breakpoints
+into our application</strong></p>
+
+<p><code>ruby
+binding.pry
+</code></p>
+
+<p><strong>Add the following shortcuts to ~/.pryrc to enable navigation while running debugging</strong></p>
+
+<p>File: ~/.pryrc</p>
+
+<p><code>ruby
+Pry.commands.alias_command 'c', 'continue'
+Pry.commands.alias_command 's', 'step'
+Pry.commands.alias_command 'n', 'next'
+</code></p>
+
+<p><strong>The pry-remote let us use pry remotely</strong></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting up Heroku]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/15/setting-up-heroku/"/>
+    <updated>2012-11-15T11:01:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/15/setting-up-heroku</id>
+    <content type="html"><![CDATA[<h2>Here are the steps to push a rails project to Heroku</h2>
+
+<ol>
+<li>Install Heroku</li>
+</ol>
+
+
+<p><code>sh
+gem install heroku
+</code></p>
+
+<p><strong>2. Create a heroku login with email and password</strong></p>
+
+<p><code>sh
+heroku Create
+</code></p>
+
+<p>3) Change the name of the app</p>
+
+<p><code>sh
+heroku apps:rename demo-app
+</code></p>
+
+<p><a href="https://devcenter.heroku.com/articles/renaming-apps">devcenter rename link</a></p>
+
+<p>4) Push the file to heroku</p>
+
+<p><code>sh
+git push heroku master
+</code></p>
+
+<p><a href="https://devcenter.heroku.com/articles/git">devcenter git link</a></p>
+
+<p>5) Check the database</p>
+
+<p><code>sh
+heroku run rake db:version
+</code></p>
+
+<p><a href="https://devcenter.heroku.com/articles/rake">devcenter rake link</a></p>
+
+<p>7) Perform a db migrate</p>
+
+<p><code>sh
+heroku run rake --trace db:migrate
+</code></p>
+
+<p>8) Console:</p>
+
+<p><code>sh
+heroku run console
+</code></p>
+
+<h2>Further reading:</h2>
+
+<p><a href="https://devcenter.heroku.com">devcenter link</a></p>
+
+<p>Any questions on this, please feel free to ask. We're here to help...</p>
+]]></content>
+  </entry>
+  
+</feed>

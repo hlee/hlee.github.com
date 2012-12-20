@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: string | Ruby on Rails Blog]]></title>
+  <link href="http://hlee.github.com/blog/categories/string/atom.xml" rel="self"/>
+  <link href="http://hlee.github.com/"/>
+  <updated>2012-12-20T09:01:14-05:00</updated>
+  <id>http://hlee.github.com/</id>
+  <author>
+    <name><![CDATA[Ken Lu, Andrew Sheelan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[generate random string in ruby]]></title>
+    <link href="http://hlee.github.com/blog/2012/11/28/generate-random-string-in-ruby/"/>
+    <updated>2012-11-28T22:39:00-05:00</updated>
+    <id>http://hlee.github.com/blog/2012/11/28/generate-random-string-in-ruby</id>
+    <content type="html"><![CDATA[<p>Sometimes we need to generate a 'n' character random string.</p>
+
+<p>Here are a few:</p>
+
+<ul>
+<li><strong>Only upper case alphabets [A-Z]</strong></li>
+</ul>
+
+
+<p>```ruby
+value = "";
+8.times{value  &lt;&lt; (65 + rand(25)).chr} >>}</p>
+
+<h1>or</h1>
+
+<p>(0...8).map{65.+(rand(26)).chr}.join
+(0...8).map{ ('A'..'Z').to_a[rand(26)]  }.join
+```</p>
+
+<ul>
+<li><strong>Lower case and upper case [a-zA-Z]</strong></li>
+</ul>
+
+
+<p>```ruby
+value = "";
+8.times{value &lt;&lt; ((rand(2)==1?65:97) + rand(25)).chr} >>}</p>
+
+<h1>or</h1>
+
+<p>o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten
+string  =  (0...50).map{ o[rand(o.length)]  }.join
+```</p>
+
+<ul>
+<li><strong>Using SecureRandom provided by ActiveSupport</strong></li>
+</ul>
+
+
+<p>```ruby
+require 'active_support/secure_random'
+random_string = ActiveSupport::SecureRandom.hex(16)</p>
+
+<h1>outputs: 5b5cd0da3121fc53b4bc84d0c8af2e81</h1>
+
+<p>```</p>
+
+<ul>
+<li>SecureRandom also has methods for:</li>
+</ul>
+
+
+<p>base64</p>
+
+<ol>
+<li>hex</li>
+<li>random_bytes</li>
+<li>random_number</li>
+</ol>
+
+
+<p><a href="http://api.rubyonrails.org/v3.0.9/classes/ActiveSupport/SecureRandom.html">see:</a></p>
+
+<ul>
+<li><strong>It is also important to avoid Ambiguity</strong></li>
+</ul>
+
+
+<p>```ruby</p>
+
+<h1>Generates a random string from a set of easily readable characters</h1>
+
+<p>def generate_activation_code(size = 6)
+  charset = %w{ 2 3 4 6 7 9 A C D E F G H J K M N P Q R T V W X Y Z}
+  (0...size).map{ charset.to_a[rand(charset.size)] }.join
+end
+```</p>
+
+<ul>
+<li><strong>Random URL Friendly Strings</strong></li>
+</ul>
+
+
+<p><code>ruby
+rand(36**length).to_s(36)
+</code></p>
+
+<ul>
+<li><strong>One more example with SecureRandom</strong></li>
+</ul>
+
+
+<p><code>ruby
+require 'securerandom'
+s = SecureRandom.urlsafe_base64(20)
+</code></p>
+
+<ul>
+<li><strong>Creating a Random string with arguments</strong></li>
+</ul>
+
+
+<p><code>ruby
+def random_string(length=10)
+  chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  password = ''
+  length.times { password &lt;&lt; chars[rand(chars.size)] }
+  password
+end
+</code></p>
+
+<ul>
+<li><strong>This example works Only in ruby 1.9</strong></li>
+</ul>
+
+
+<p>```ruby
+[*('A'..'Z')].sample(8).join</p>
+
+<h1>Generate a random 8 letter string (e.g. NVAYXHGR)</h1>
+
+<p>([<em>('A'..'Z'),</em>('0'..'9')]-%w(0 1 I O)).sample(8).join</p>
+
+<h1>Generate a random 8 character string (e.g. 3PH4SWF2), excludes 0/1/I/O. Ruby 1.9</h1>
+
+<p>ALPHABET = ('a'..'z').to_a
+10.times.map{ ALPHABET.sample }.join
+10.times.inject(''){|s| s &lt;&lt; ALPHABET.sample }
+```</p>
+
+<ul>
+<li><strong>Here's one using digest sha1</strong></li>
+</ul>
+
+
+<p><code>ruby
+require 'sha1'
+srand
+seed = "--#{rand(10000)}--#{Time.now}--"
+Digest::SHA1.hexdigest(seed)[0,8]
+</code></p>
+
+<ul>
+<li><p><strong>Here are more examples to help</strong></p></li>
+<li><p>Example 1</p></li>
+</ul>
+
+
+<p>```ruby
+rand(2**256).to_s(36)[0..7]</p>
+
+<h1>Add ljust if you are really paranoid about the correct string length:</h1>
+
+<p>rand(2**256).to_s(36).ljust(8,'a')[0..7]
+characters = ('a'..'z').to_a + ('A'..'Z').to_a</p>
+
+<h1>Prior to 1.9, use .choice, not .sample</h1>
+
+<p>(0..8).map{characters.sample}.join
+(0...8).collect { |n| value  &lt;&lt; (65 + rand(25)).chr }.join()
+```</p>
+
+<ul>
+<li>Example 2</li>
+</ul>
+
+
+<p>```ruby
+def generate_random_string(length=6)
+  string = ""
+  chars = ("A".."Z").to_a
+  length.times do</p>
+
+<pre><code>string &lt;&lt; chars[rand(chars.length-1)]
+</code></pre>
+
+<p>  end
+  string
+end
+```</p>
+
+<ul>
+<li><p>Example 3
+```ruby
+chars = [<em>('a'..'z'),</em>('0'..'9')].flatten</p>
+
+<h1>Single expression, can be passed as an argument, allows duplicate characters:</h1>
+
+<p>Array.new(len) {|i| chars.sample}.join
+```</p></li>
+<li><p>Example 4</p></li>
+</ul>
+
+
+<p><code>ruby
+def token(length=16)
+  chars = [*('A'..'Z'), *('a'..'z'), *(0..9)]
+  (0..length).map {chars.sample}.join
+end
+</code></p>
+
+<ul>
+<li><p>Example 5
+<code>ruby
+''.tap {|v| 4.times { v &lt;&lt; ('a'..'z').to_a.sample} }
+</code></p></li>
+<li><p>Example 6
+```ruby
+class String</p>
+
+<p>def self.random(length=10)
+  ('a'..'z').sort_by {rand}[0,length].join
+end</p></li>
+</ul>
+
+
+<p>end
+```</p>
+
+<ul>
+<li>Example 7
+```ruby
+(('a'..'z').to_a + ('A'..'Z').to_a + (0..9).to_a).sample(8).join</li>
+</ul>
+
+
+<p>([(48..57),(65..90),(97..122)]).sample(8).collect{|x|x.chr}""
+```</p>
+
+<ul>
+<li><p>Example 8
+```ruby
+def secure_random_string(length = 32, non_ambiguous = false)
+characters = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a</p>
+
+<p>%w{I O l 0 1}.each{ |ambiguous_character|
+  characters.delete ambiguous_character
+} if non_ambiguous</p>
+
+<p>(0...length).map{
+  characters[ActiveSupport::SecureRandom.random_number(characters.size)]
+}.join
+end
+```</p></li>
+<li><p>Example 9
+```ruby
+SecureRandom.base64(15).tr('+/=lIO0', 'pqrsxyz')</p>
+
+<h1>ruby 1.8 and unix</h1>
+
+<p>random_string = <code>openssl rand -base64 24</code>
+```</p></li>
+</ul>
+
+
+<p><a href="http://stackoverflow.com/questions/88311/how-best-to-generate-a-random-string-in-ruby">.</a></p>
+]]></content>
+  </entry>
+  
+</feed>
